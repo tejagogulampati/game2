@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Water Rush</title>
+
+<style>
+
+body{
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+background:#d9f4ff;
+font-family:Arial;
+}
+
+#game{
+width:360px;
+height:600px;
+background:linear-gradient(#69c6ff,#b7ebff);
+border-radius:20px;
+border:4px solid #3a9edb;
+position:relative;
+overflow:hidden;
+}
+
+/* Background */
+
+.sun{
+position:absolute;
+top:40px;
+right:40px;
+font-size:60px;
+}
+
+.cloud{
+position:absolute;
+font-size:50px;
+animation:cloudMove 30s linear infinite;
+}
+
+@keyframes cloudMove{
+from{left:-100px}
+to{left:420px}
+}
+
+.hill{
+position:absolute;
+bottom:0;
+width:200%;
+height:180px;
+background:#6bd16b;
+border-radius:50%;
+}
+
+.hill1{ left:-50%; bottom:-60px; }
+.hill2{ left:-10%; bottom:-80px; background:#4db84d; }
+
+/* UI */
+
+#top{
+display:flex;
+justify-content:space-between;
+padding:10px;
+color:white;
+font-weight:bold;
+font-size:18px;
+}
+
+#logo{
+position:absolute;
+top:10px;
+left:50%;
+transform:translateX(-50%);
+background:white;
+padding:4px 10px;
+border-radius:6px;
+font-size:13px;
+font-weight:bold;
+}
+
+/* Bucket */
+
+#bucket{
+position:absolute;
+bottom:130px;
+left:150px;
+font-size:80px;
+}
+
+/* Drops */
+
+.drop{
+position:absolute;
+font-size:30px;
+}
+
+.bad{
+color:green;
+}
+
+/* Splash */
+
+.splash{
+position:absolute;
+font-size:22px;
+animation:splashAnim 0.4s forwards;
+}
+
+@keyframes splashAnim{
+0%{opacity:1; transform:scale(1)}
+100%{opacity:0; transform:scale(2)}
+}
+
+/* Progress */
+
+#progressBar{
+position:absolute;
+bottom:70px;
+left:20px;
+width:320px;
+height:18px;
+background:#f0dca2;
+border-radius:10px;
+overflow:hidden;
+}
+
+#progress{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00ff9d,#8cff00);
+}
+
+#donation{
+position:absolute;
+bottom:40px;
+width:100%;
+text-align:center;
+font-weight:bold;
+}
+
+/* Buttons */
+
+#start{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+padding:12px 20px;
+background:#ffd400;
+border:none;
+border-radius:10px;
+font-size:18px;
+cursor:pointer;
+}
+
+#gameOver{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+padding:20px;
+border-radius:10px;
+display:none;
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<div class="sun">☀️</div>
+<div class="cloud" style="top:90px;">☁️</div>
+<div class="cloud" style="top:150px; animation-delay:10s;">☁️</div>
+
+<div class="hill hill1"></div>
+<div class="hill hill2"></div>
+
+<div id="top">
+<div>Score: <span id="score">0</span></div>
+<div id="lives">❤️❤️❤️</div>
+</div>
+
+<div id="logo">charity: water</div>
+
+<div id="bucket">🪣</div>
+
+<div id="progressBar">
+<div id="progress"></div>
+</div>
+
+<div id="donation">Donation: $0</div>
+
+<button id="start">Start Game</button>
+
+<div id="gameOver">
+<h2>Game Over</h2>
+<p id="final"></p>
+<button onclick="startGame()">Play Again</button>
+</div>
+
+</div>
+
+<script>
+
+let score=0
+let lives=3
+let donation=0
+let bucketX=150
+let gameLoop
+
+const scoreText=document.getElementById("score")
+const livesText=document.getElementById("lives")
+const donationText=document.getElementById("donation")
+const progress=document.getElementById("progress")
+const bucket=document.getElementById("bucket")
+const game=document.getElementById("game")
+const startBtn=document.getElementById("start")
+const gameOver=document.getElementById("gameOver")
+
+startBtn.onclick=startGame
+
+function startGame(){
+
+score=0
+lives=3
+donation=0
+
+scoreText.innerText=score
+livesText.innerText="❤️❤️❤️"
+donationText.innerText="Donation: $0"
+progress.style.width="0%"
+
+gameOver.style.display="none"
+startBtn.style.display="none"
+
+gameLoop=setInterval(createDrop,700)
+
+}
+
+/* Move bucket */
+
+document.addEventListener("keydown",function(e){
+
+if(e.key==="ArrowLeft") bucketX-=30
+if(e.key==="ArrowRight") bucketX+=30
+
+if(bucketX<0) bucketX=0
+if(bucketX>280) bucketX=280
+
+bucket.style.left=bucketX+"px"
+
+})
+
+/* Create drops */
+
+function createDrop(){
+
+let drop=document.createElement("div")
+
+if(Math.random()<0.2){
+drop.innerText="🟢"
+drop.classList.add("drop","bad")
+}else{
+drop.innerText="💧"
+drop.classList.add("drop")
+}
+
+drop.style.left=Math.random()*320+"px"
+drop.style.top="-20px"
+
+game.appendChild(drop)
+
+let fall=setInterval(()=>{
+
+drop.style.top=drop.offsetTop+5+"px"
+
+let dropTop=drop.offsetTop
+let dropLeft=drop.offsetLeft
+let bucketLeft=bucket.offsetLeft
+
+/* Collision */
+
+if(dropTop>390 && dropLeft>bucketLeft-10 && dropLeft<bucketLeft+70){
+
+clearInterval(fall)
+
+/* Sink into bucket */
+
+let sink=setInterval(()=>{
+
+drop.style.top=drop.offsetTop+4+"px"
+
+if(drop.offsetTop>470){
+
+clearInterval(sink)
+
+if(drop.classList.contains("bad")){
+
+lives--
+updateLives()
+
+}else{
+
+score+=10
+donation+=1
+
+scoreText.innerText=score
+donationText.innerText="Donation: $"+donation
+progress.style.width=donation*10+"%"
+
+createSplash(bucketLeft+30,470)
+
+}
+
+drop.remove()
+
+}
+
+},20)
+
+}
+
+if(dropTop>560){
+drop.remove()
+clearInterval(fall)
+}
+
+},30)
+
+}
+
+/* Splash */
+
+function createSplash(x,y){
+
+let splash=document.createElement("div")
+splash.innerText="💦"
+splash.classList.add("splash")
+
+splash.style.left=x+"px"
+splash.style.top=y+"px"
+
+game.appendChild(splash)
+
+setTimeout(()=>splash.remove(),400)
+
+}
+
+/* Lives */
+
+function updateLives(){
+
+if(lives==3) livesText.innerText="❤️❤️❤️"
+if(lives==2) livesText.innerText="❤️❤️"
+if(lives==1) livesText.innerText="❤️"
+
+if(lives<=0) endGame()
+
+}
+
+function endGame(){
+
+clearInterval(gameLoop)
+
+document.querySelectorAll(".drop").forEach(d=>d.remove())
+
+document.getElementById("final").innerText=
+"Final Score: "+score+" | Donation: $"+donation
+
+gameOver.style.display="block"
+startBtn.style.display="block"
+
+}
+
+</script>
+
+</body>
+</html>
