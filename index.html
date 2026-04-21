@@ -1,385 +1,1051 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Water Rush</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sejol George Studies ✿</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-
-body{
-margin:0;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-background:#d9f4ff;
-font-family:Arial;
+/* ══════════════════════════════════════════
+   CUSTOM PROPERTIES
+══════════════════════════════════════════ */
+:root {
+  --bg:         #fdf4f7;
+  --bg2:        #f9edf2;
+  --glass:      rgba(255,255,255,0.55);
+  --glass2:     rgba(255,255,255,0.35);
+  --border:     rgba(230,170,195,0.45);
+  --border2:    rgba(220,150,180,0.3);
+  --p1:         #e8839e;
+  --p2:         #f0a3b8;
+  --p3:         #f7c4d4;
+  --p4:         #fce8ef;
+  --p5:         #d6607e;
+  --p6:         #f5b8cb;
+  --rose:       #c9516d;
+  --blush:      #f2c4d2;
+  --text:       #4a2535;
+  --text2:      #7a4558;
+  --muted:      #b07a90;
+  --green:      #5ec48a;
+  --red:        #e86980;
+  --yellow:     #f0c060;
+  --shadow:     0 8px 32px rgba(200,100,140,0.15);
+  --shadow2:    0 2px 12px rgba(200,100,140,0.1);
+  --glow:       0 0 24px rgba(232,131,158,0.3);
+  --glow2:      0 0 48px rgba(232,131,158,0.18);
 }
 
-#game{
-width:360px;
-height:600px;
-background:linear-gradient(#69c6ff,#b7ebff);
-border-radius:20px;
-border:4px solid #3a9edb;
-position:relative;
-overflow:hidden;
+/* ══ RESET ══ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* Background */
+/* ══════════════════════════════════════════
+   ANIMATED BACKGROUND
+══════════════════════════════════════════ */
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  overflow: hidden;
+}
+.bg-blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(70px); opacity: 0.45;
+  animation: blobFloat ease-in-out infinite alternate;
+}
+.b1 { width:500px;height:500px; top:-100px;left:-100px; background:radial-gradient(circle,#f7c4d4,#f0a3b8); animation-duration:12s; }
+.b2 { width:400px;height:400px; top:30%;right:-120px; background:radial-gradient(circle,#fce8ef,#f5b8cb); animation-duration:16s;animation-delay:3s; }
+.b3 { width:350px;height:350px; bottom:-80px;left:20%; background:radial-gradient(circle,#f9edf2,#e8839e88); animation-duration:14s;animation-delay:6s; }
+.b4 { width:250px;height:250px; top:60%;left:5%; background:radial-gradient(circle,#fce8ef,#f7c4d4); animation-duration:18s;animation-delay:1s; }
 
-.sun{
-position:absolute;
-top:40px;
-right:40px;
-font-size:60px;
+@keyframes blobFloat {
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(30px) scale(1.06); }
 }
 
-.cloud{
-position:absolute;
-font-size:50px;
-animation:cloudMove 30s linear infinite;
+/* ══ PARTICLES ══ */
+.sparkle {
+  position: fixed; pointer-events: none; z-index: 0;
+  animation: sparkleFade linear infinite;
+  font-size: 12px; color: var(--p2);
+  opacity: 0;
+}
+@keyframes sparkleFade {
+  0%   { opacity:0; transform:translateY(0) scale(.5); }
+  20%  { opacity:.8; }
+  80%  { opacity:.4; }
+  100% { opacity:0; transform:translateY(-60px) scale(1.2) rotate(30deg); }
 }
 
-@keyframes cloudMove{
-from{left:-100px}
-to{left:420px}
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+#app {
+  position: relative; z-index: 1;
+  max-width: 820px; margin: 0 auto;
+  padding: 0 20px 80px;
 }
 
-.hill{
-position:absolute;
-bottom:0;
-width:200%;
-height:180px;
-background:#6bd16b;
-border-radius:50%;
+/* ══════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════ */
+.header {
+  padding: 40px 0 28px;
+  text-align: center;
+  position: relative;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text);
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin-bottom: 5px;
+}
+.logo span {
+  background: linear-gradient(135deg, var(--p5), var(--p1), var(--p2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  font-weight: 500;
+}
+.logo-sub {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 24px;
 }
 
-.hill1{ left:-50%; bottom:-60px; }
-.hill2{ left:-10%; bottom:-80px; background:#4db84d; }
+/* ══ STATS ROW ══ */
+.stats-row {
+  display: flex; gap: 12px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 8px;
+}
+.stat-chip {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--muted); display: flex; align-items: center; gap: 6px;
+  box-shadow: var(--shadow2);
+  transition: .2s;
+}
+.stat-chip .val { color: var(--p5); font-weight: 500; }
+.stat-chip.streak .val { color: var(--rose); }
+.stat-chip.mastered .val { color: var(--green); }
 
-/* UI */
-
-#top{
-display:flex;
-justify-content:space-between;
-padding:10px;
-color:white;
-font-weight:bold;
-font-size:18px;
+/* ══ PROGRESS BAR ══ */
+.progress-wrap { margin: 18px 0 0; }
+.progress-label {
+  display: flex; justify-content: space-between;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--muted); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;
+}
+.prog-track {
+  height: 5px; background: rgba(200,100,140,0.12);
+  border-radius: 3px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--p5), var(--p1), var(--p2));
+  transition: width .7s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 10px rgba(232,131,158,.5);
 }
 
-#logo{
-position:absolute;
-top:10px;
-left:50%;
-transform:translateX(-50%);
-background:white;
-padding:4px 10px;
-border-radius:6px;
-font-size:13px;
-font-weight:bold;
+/* ══════════════════════════════════════════
+   MODE TABS
+══════════════════════════════════════════ */
+.tabs-wrap {
+  display: flex; gap: 6px; justify-content: center;
+  margin: 28px 0 22px; flex-wrap: wrap;
+}
+.tab {
+  background: var(--glass2);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 10px 22px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--muted);
+  transition: all .25s;
+  display: flex; align-items: center; gap: 7px;
+}
+.tab:hover { border-color: var(--p2); color: var(--p5); transform: translateY(-1px); }
+.tab.active {
+  background: linear-gradient(135deg, rgba(232,131,158,.18), rgba(240,163,184,.1));
+  border-color: var(--p1); color: var(--p5);
+  box-shadow: var(--glow);
 }
 
-/* Bucket */
+/* ══ FILTER / CONTROLS ROW ══ */
+.ctrl-row {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 18px; flex-wrap: wrap;
+}
+.chip-btn {
+  background: var(--glass); backdrop-filter: blur(8px);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 14px; font-size: 11.5px; cursor: pointer;
+  color: var(--muted); transition: .2s;
+  font-family: 'DM Mono', monospace;
+}
+.chip-btn:hover { border-color: var(--p2); color: var(--p5); }
+.chip-btn.active { background: rgba(232,131,158,.12); border-color: var(--p1); color: var(--p5); }
+.chip-btn.danger.active { background: rgba(232,105,128,.1); border-color: var(--red); color: var(--red); }
+.ml-auto { margin-left: auto; }
+.card-count-label {
+  text-align: center; margin-bottom: 14px;
+  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+  letter-spacing: 1px;
+}
+.card-count-label span { color: var(--p5); }
 
-#bucket{
-position:absolute;
-bottom:130px;
-left:150px;
-font-size:80px;
+/* ══════════════════════════════════════════
+   FLASHCARD
+══════════════════════════════════════════ */
+.card-scene {
+  perspective: 1400px;
+  height: 280px; cursor: pointer; margin-bottom: 18px;
+  user-select: none;
+}
+.card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+}
+.card-inner.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  border-radius: 24px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 36px 40px; text-align: center;
 }
 
-/* Drops */
-
-.drop{
-position:absolute;
-font-size:30px;
+/* FRONT */
+.card-front {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.card-front::before {
+  content: '';
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--p2), transparent);
+  border-radius: 1px;
+}
+/* BACK */
+.card-back {
+  background: linear-gradient(135deg, rgba(255,240,246,.92) 0%, rgba(253,230,240,.88) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(220,140,170,.5);
+  box-shadow: var(--shadow), 0 0 40px rgba(232,131,158,.12), inset 0 1px 0 rgba(255,255,255,.8);
+  transform: rotateY(180deg);
+}
+.card-back::before {
+  content: '';
+  position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--p1), transparent);
+  border-radius: 1px;
 }
 
-.bad{
-color:green;
+.card-eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 9.5px;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-eyebrow::before, .card-eyebrow::after {
+  content: ''; flex: 0 0 16px; height: 1px;
+  background: var(--border);
+}
+.card-question {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(15px,2.2vw,19px); font-weight: 500;
+  color: var(--text); line-height: 1.5;
+}
+.card-answer {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(17px,2.5vw,22px); font-weight: 500;
+  color: var(--p5); line-height: 1.5;
+  font-style: italic;
+}
+.card-num-badge {
+  position: absolute; top: 14px; right: 18px;
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--border);
+}
+.hard-dot {
+  position: absolute; top: 14px; left: 18px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red); display: none;
+  box-shadow: 0 0 6px rgba(232,105,128,.6);
+}
+.hard-dot.show { display: block; }
+.flip-whisper {
+  position: absolute; bottom: 14px;
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--border);
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{opacity:.4;} 50%{opacity:.9;} }
+
+/* ══ CARD BUTTONS ══ */
+.card-btns {
+  display: flex; gap: 10px; justify-content: center;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.c-btn {
+  background: var(--glass); backdrop-filter: blur(8px);
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 11px 20px; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--text2); transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.c-btn:hover { transform: translateY(-2px); }
+.c-btn.next {
+  background: linear-gradient(135deg, rgba(232,131,158,.18), rgba(240,163,184,.08));
+  border-color: var(--p1); color: var(--p5);
+}
+.c-btn.next:hover { box-shadow: var(--glow); }
+.c-btn.mark {
+  border-color: rgba(232,105,128,.35); color: var(--red);
+}
+.c-btn.mark:hover { background: rgba(232,105,128,.08); }
+.c-btn.mark.on { background: rgba(232,105,128,.1); border-color: var(--red); }
+
+/* ══ KEYBOARD HINTS ══ */
+.kb-row {
+  display: flex; gap: 14px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 24px;
+}
+.kb-hint {
+  display: flex; align-items: center; gap: 5px;
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
+}
+.key {
+  background: var(--glass); backdrop-filter: blur(6px);
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 2px 7px; font-size: 10px; color: var(--muted);
 }
 
-/* Splash */
+/* ══════════════════════════════════════════
+   MEMORY DRILL MODE
+══════════════════════════════════════════ */
+#drill-mode { display: none; }
+.drill-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 44px 40px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+  min-height: 200px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.drill-card::before {
+  content: '';
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  width: 50%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--p1), transparent);
+}
+.drill-q {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(15px,2.2vw,20px); font-weight: 500;
+  color: var(--text); line-height: 1.5; margin-bottom: 24px;
+}
+.drill-reveal {
+  background: linear-gradient(135deg, var(--p5), var(--p1));
+  border: none; border-radius: 40px;
+  padding: 12px 32px; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+  color: white; transition: all .2s;
+  box-shadow: 0 4px 18px rgba(197,81,109,.25);
+  letter-spacing: .3px;
+}
+.drill-reveal:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(197,81,109,.35); }
+.drill-answer {
+  margin-top: 20px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, rgba(247,196,212,.25), rgba(240,163,184,.15));
+  border: 1px solid rgba(220,140,170,.35);
+  border-radius: 14px;
+  display: none; animation: fadeUp .3s ease;
+}
+.drill-answer.show { display: block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+.drill-answer-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px,2.5vw,21px); font-weight: 500;
+  color: var(--p5); line-height: 1.5; font-style: italic;
+}
+.drill-grade-row {
+  display: flex; gap: 10px; justify-content: center; margin-top: 16px;
+}
+.grade-btn {
+  border-radius: 10px; padding: 10px 22px; cursor: pointer;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600;
+  transition: all .2s; border: 1px solid transparent;
+}
+.gb-easy {
+  background: rgba(94,196,138,.12); border-color: rgba(94,196,138,.4); color: var(--green);
+}
+.gb-easy:hover { background: rgba(94,196,138,.22); transform: translateY(-2px); }
+.gb-hard {
+  background: rgba(232,105,128,.1); border-color: rgba(232,105,128,.35); color: var(--red);
+}
+.gb-hard:hover { background: rgba(232,105,128,.2); transform: translateY(-2px); }
+.gb-again {
+  background: rgba(240,192,96,.1); border-color: rgba(240,192,96,.4); color: var(--yellow);
+}
+.gb-again:hover { background: rgba(240,192,96,.2); transform: translateY(-2px); }
 
-.splash{
-position:absolute;
-font-size:22px;
-animation:splashAnim 0.4s forwards;
+/* ══════════════════════════════════════════
+   FOCUS MODE
+══════════════════════════════════════════ */
+#focus-mode { display: none; }
+.focus-outer {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.focus-timer-wrap {
+  background: var(--glass); backdrop-filter: blur(16px);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 20px 32px; text-align: center;
+  box-shadow: var(--shadow2); width: 100%;
+}
+.focus-timer {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px; font-weight: 300; color: var(--p5); line-height: 1;
+  margin-bottom: 10px;
+}
+.focus-timer-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.f-btn {
+  background: var(--glass); backdrop-filter: blur(6px);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 16px; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+  transition: .2s;
+}
+.f-btn:hover { border-color: var(--p2); color: var(--p5); }
+.f-btn.active-timer { background: rgba(232,131,158,.1); border-color: var(--p1); color: var(--p5); }
+.focus-card-scene {
+  perspective: 1200px; width: 100%; cursor: pointer;
+}
+.focus-card-inner {
+  width: 100%; height: 260px;
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.4,0,.2,1);
+  position: relative;
+}
+.focus-card-inner.flipped { transform: rotateY(180deg); }
+.focus-face {
+  position: absolute; inset: 0; border-radius: 20px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 36px; text-align: center;
+}
+.focus-front {
+  background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.focus-back {
+  background: linear-gradient(135deg, rgba(255,240,246,.92), rgba(253,230,240,.88));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(220,140,170,.5); box-shadow: var(--shadow);
+  transform: rotateY(180deg);
+}
+.focus-nav { display: flex; gap: 10px; justify-content: center; }
+
+/* ══════════════════════════════════════════
+   STREAK / TOAST OVERLAYS
+══════════════════════════════════════════ */
+.streak-overlay {
+  position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .3s;
+}
+.streak-overlay.show { opacity: 1; }
+.streak-badge {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px,7vw,64px); font-weight: 600; font-style: italic;
+  text-align: center;
+  background: linear-gradient(135deg, var(--p5), var(--p1), var(--p3));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(232,131,158,.5));
+  animation: strPop .6s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes strPop {
+  0%  { transform: scale(0) translateY(20px); opacity: 0; }
+  60% { transform: scale(1.15) translateY(-5px); }
+  100%{ transform: scale(1) translateY(0); opacity: 1; }
 }
 
-@keyframes splashAnim{
-0%{opacity:1; transform:scale(1)}
-100%{opacity:0; transform:scale(2)}
+.toast {
+  position: fixed; bottom: 28px; right: 28px; z-index: 998;
+  background: var(--glass); backdrop-filter: blur(16px);
+  border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px 20px;
+  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--p5);
+  box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(8px);
+  transition: all .3s; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════════════════
+   SECTION TITLE
+══════════════════════════════════════════ */
+.section-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 0 16px;
+}
+.section-divider span {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
 }
 
-/* Progress */
-
-#progressBar{
-position:absolute;
-bottom:70px;
-left:20px;
-width:320px;
-height:18px;
-background:#f0dca2;
-border-radius:10px;
-overflow:hidden;
+/* ══ RESPONSIVE ══ */
+@media (max-width: 560px) {
+  .header { padding: 28px 0 20px; }
+  #app { padding: 0 14px 60px; }
+  .card-face { padding: 26px 22px; }
+  .drill-card { padding: 30px 22px; }
 }
-
-#progress{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#00ff9d,#8cff00);
-}
-
-#donation{
-position:absolute;
-bottom:40px;
-width:100%;
-text-align:center;
-font-weight:bold;
-}
-
-/* Buttons */
-
-#start{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-padding:12px 20px;
-background:#ffd400;
-border:none;
-border-radius:10px;
-font-size:18px;
-cursor:pointer;
-}
-
-#gameOver{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:white;
-padding:20px;
-border-radius:10px;
-display:none;
-text-align:center;
-}
-
 </style>
 </head>
-
 <body>
 
-<div id="game">
-
-<div class="sun">☀️</div>
-<div class="cloud" style="top:90px;">☁️</div>
-<div class="cloud" style="top:150px; animation-delay:10s;">☁️</div>
-
-<div class="hill hill1"></div>
-<div class="hill hill2"></div>
-
-<div id="top">
-<div>Score: <span id="score">0</span></div>
-<div id="lives">❤️❤️❤️</div>
+<!-- BG -->
+<div class="bg-layer">
+  <div class="bg-blob b1"></div>
+  <div class="bg-blob b2"></div>
+  <div class="bg-blob b3"></div>
+  <div class="bg-blob b4"></div>
 </div>
 
-<div id="logo">charity: water</div>
-
-<div id="bucket">🪣</div>
-
-<div id="progressBar">
-<div id="progress"></div>
+<!-- OVERLAYS -->
+<div class="streak-overlay" id="streak-overlay">
+  <div class="streak-badge" id="streak-text">✿ 3× Streak!</div>
 </div>
+<div class="toast" id="toast">✦ +10 XP</div>
 
-<div id="donation">Donation: $0</div>
+<div id="app">
 
-<button id="start">Start Game</button>
+  <!-- ══ HEADER ══ -->
+  <div class="header">
+    <div class="logo">Sejol <span>George</span> Studies</div>
+    <div class="logo-sub">✿ memorize · repeat · master ✿</div>
 
-<div id="gameOver">
-<h2>Game Over</h2>
-<p id="final"></p>
-<button onclick="startGame()">Play Again</button>
-</div>
+    <div class="stats-row">
+      <div class="stat-chip xp">✦ <span class="val" id="xp-val">0</span> xp</div>
+      <div class="stat-chip streak">🌸 <span class="val" id="streak-val">0</span> streak</div>
+      <div class="stat-chip mastered">✓ <span class="val" id="mastered-val">0</span>/<span id="total-val">56</span> mastered</div>
+    </div>
 
-</div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>mastery</span><span id="pct-val">0%</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ TABS ══ -->
+  <div class="tabs-wrap">
+    <button class="tab active" onclick="setMode('flash',this)" id="t-flash">🃏 Flashcards</button>
+    <button class="tab" onclick="setMode('drill',this)" id="t-drill">🧠 Memory Drill</button>
+    <button class="tab" onclick="setMode('focus',this)" id="t-focus">✦ Focus Mode</button>
+  </div>
+
+  <!-- ══ FILTER / CTRL ROW ══ -->
+  <div class="ctrl-row">
+    <button class="chip-btn active" onclick="setFilter('all',this)">All (<span id="all-count">56</span>)</button>
+    <button class="chip-btn danger" onclick="setFilter('hard',this)" id="hard-chip">⚠ Hard (<span id="hard-count">0</span>)</button>
+    <button class="chip-btn ml-auto" onclick="shuffle()">↺ Shuffle</button>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       FLASHCARD MODE
+  ════════════════════════════════════════ -->
+  <div id="flash-mode">
+    <div class="card-count-label">Card <span id="fc-cur">1</span> of <span id="fc-tot">56</span></div>
+
+    <div class="card-scene" onclick="flip()">
+      <div class="card-inner" id="card-inner">
+        <div class="card-face card-front">
+          <div class="hard-dot" id="fc-hard-dot"></div>
+          <div class="card-num-badge" id="fc-num">#1</div>
+          <div class="card-eyebrow">question</div>
+          <div class="card-question" id="fc-q">—</div>
+          <div class="flip-whisper">tap to reveal ✿</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-eyebrow">answer</div>
+          <div class="card-answer" id="fc-a">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-btns">
+      <button class="c-btn" onclick="fcPrev()">← Prev</button>
+      <button class="c-btn mark" id="fc-mark-btn" onclick="toggleHard()">⚠ Mark Hard</button>
+      <button class="c-btn next" onclick="fcNext()">Next →</button>
+    </div>
+
+    <div class="kb-row">
+      <div class="kb-hint"><span class="key">Space</span>flip</div>
+      <div class="kb-hint"><span class="key">←</span><span class="key">→</span>navigate</div>
+      <div class="kb-hint"><span class="key">H</span>mark hard</div>
+      <div class="kb-hint"><span class="key">S</span>shuffle</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       MEMORY DRILL MODE
+  ════════════════════════════════════════ -->
+  <div id="drill-mode">
+    <div class="card-count-label">Question <span id="dr-cur">1</span> of <span id="dr-tot">56</span></div>
+
+    <div class="drill-card">
+      <div class="hard-dot" id="dr-hard-dot"></div>
+      <div class="card-num-badge" id="dr-num">#1</div>
+      <div class="drill-q" id="drill-q">—</div>
+      <button class="drill-reveal" id="drill-reveal-btn" onclick="drillReveal()">Reveal Answer ✿</button>
+      <div class="drill-answer" id="drill-answer">
+        <div class="drill-answer-text" id="drill-a">—</div>
+        <div class="drill-grade-row">
+          <button class="grade-btn gb-easy" onclick="drillGrade('easy')">✓ Easy</button>
+          <button class="grade-btn gb-again" onclick="drillGrade('again')">↺ Again</button>
+          <button class="grade-btn gb-hard" onclick="drillGrade('hard')">✗ Hard</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kb-row">
+      <div class="kb-hint"><span class="key">Space</span>reveal</div>
+      <div class="kb-hint"><span class="key">E</span>easy</div>
+      <div class="kb-hint"><span class="key">A</span>again</div>
+      <div class="kb-hint"><span class="key">X</span>hard</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       FOCUS MODE
+  ════════════════════════════════════════ -->
+  <div id="focus-mode">
+    <div class="focus-outer">
+      <!-- Timer -->
+      <div class="focus-timer-wrap">
+        <div class="focus-timer" id="focus-timer-disp">25:00</div>
+        <div class="focus-timer-btns">
+          <button class="f-btn" onclick="setTimer(25)">25 min</button>
+          <button class="f-btn" onclick="setTimer(15)">15 min</button>
+          <button class="f-btn" onclick="setTimer(10)">10 min</button>
+          <button class="f-btn active-timer" id="focus-start-btn" onclick="toggleTimer()">▶ Start</button>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="section-divider"><span>focus card</span></div>
+      <div class="card-count-label" style="width:100%;text-align:center">Card <span id="foc-cur">1</span> of <span id="foc-tot">56</span></div>
+      <div class="focus-card-scene" onclick="focusFlip()">
+        <div class="focus-card-inner" id="focus-inner">
+          <div class="focus-face focus-front">
+            <div class="card-eyebrow">question</div>
+            <div class="card-question" id="foc-q">—</div>
+            <div class="flip-whisper">tap to reveal ✿</div>
+          </div>
+          <div class="focus-face focus-back">
+            <div class="card-eyebrow">answer</div>
+            <div class="card-answer" id="foc-a">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="focus-nav">
+        <button class="c-btn" onclick="focusPrev()">← Prev</button>
+        <button class="c-btn next" onclick="focusNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
 
 <script>
+/* ══════════════════════════════════════
+   ALL Q&A — BOTH EXAM PDFS COMBINED
+══════════════════════════════════════ */
+const ALL = [
+  // ── EXAM PDF 2 (Fluids, Electrolytes, GMOs) ──
+  {q:"Which correctly describes the role of an electrolyte in circulatory fluid exchange?", a:"High Na⁺ concentration inside capillaries facilitates reabsorption of fluid at the venous end"},
+  {q:"True or False: The SOLUTE is the substance dissolved in the SOLVENT.", a:"True"},
+  {q:"Standard diet recommendation for patients with hypertension:", a:"A reduction of sodium in the diet"},
+  {q:"Intracellular electrolytes (highest concentration inside cells):", a:"Potassium, Magnesium, Phosphorus"},
+  {q:"Extracellular electrolytes (highest concentration outside cells):", a:"Sodium, Chloride, Calcium"},
+  {q:"Role of Potassium (K⁺) in the body:", a:"Maintains fluid balance, muscle contractions, and nerve transmissions"},
+  {q:"Which is true regarding hyperkalemia?", a:"Can be caused by kidney disease and can lead to cardiac arrest"},
+  {q:"True or False: Most body fluids are found outside of cells in the extracellular fluid.", a:"False — most body fluids are INTRACELLULAR"},
+  {q:"Which statement about water consumption is FALSE?", a:"Water makes up 25% of body weight (False) AND lighter urine = dehydration (False — lighter = hydrated)"},
+  {q:"Most common cause of electrolyte imbalance:", a:"Kidney disease"},
+  {q:"True or False: The amount of salt in a solution does not affect its tonicity.", a:"False — salt concentration directly determines tonicity"},
+  {q:"Which is true regarding electrolytes and balance?", a:"The kidneys are responsible for maintaining electrolyte balance"},
+  {q:"Which is true: Potassium is a(n)…", a:"Electrolyte"},
+  {q:"Role of sodium (Na⁺) in human health:", a:"Regulates both fluid and pH balance in the body"},
+  {q:"Definition of hypernatremia:", a:"Abnormally high Sodium levels which can cause high blood pressure"},
+  {q:"Best description of osmosis:", a:"Movement of water toward an area of higher solute concentration"},
+  {q:"True or False: For most adults with hypertension there is no known cause, and roughly half can reduce symptoms by cutting sodium.", a:"True"},
+  {q:"True or False: A cell immersed in a hypertonic solution would shrink.", a:"True"},
+  {q:"What is true about Sodium vs. Potassium locations?", a:"K⁺ is the major positive intracellular cation; Na⁺ is the major positive extracellular cation"},
+  {q:"What is NOT true about osmosis re: congestive heart failure patients?", a:"They should NOT increase water intake — that would worsen fluid shift to interstitial space"},
+  {q:"Definition of hyperkalemia:", a:"Abnormally high Potassium levels causing abnormal heart rhythm"},
+  {q:"Positively charged electrolytes:", a:"Sodium, Potassium, Magnesium, Calcium"},
+  {q:"Negatively charged electrolytes:", a:"Chloride, Phosphorus"},
+  {q:"Function of sodium — which is correct?", a:"Sodium transports glucose into cells when moving down its concentration gradient"},
+  {q:"Which is true about electrolytes and fluid?", a:"Electrolytes regulate fluid distribution in the body"},
+  {q:"Define: Hypotonic solution", a:"Lower solute concentration than the cell"},
+  {q:"Define: Hypertonic solution", a:"Higher solute concentration than the cell"},
+  {q:"Define: Isotonic solution", a:"Same solute concentration as the cell"},
+  {q:"True or False: A cell in a hypotonic solution would increase in volume.", a:"True — water moves into the cell"},
+  {q:"Electrolytes can aid in…", a:"Movement of molecules across the cell membrane and into the cell"},
+  {q:"True or False: Sodium and potassium are transported in the same direction across the membrane.", a:"False — they move in opposite directions (Na⁺/K⁺ ATPase pump)"},
+  {q:"Definition of electrolytes:", a:"Charged minerals dissolved in water which regulate fluid distribution"},
+  // ── GMO / ORGANIC / SUPPLEMENTS ──
+  {q:"Which is NOT controlled for in Organically labeled produce?", a:"Naturally occurring mutations"},
+  {q:"True or False: The 'clean 15' are foods that need to be bought organic.", a:"False — the clean 15 have low pesticide residue and do NOT need to be bought organic"},
+  {q:"The first genetically modified food available to consumers in the US was:", a:"A Tomato"},
+  {q:"Which is true about Glyphosate and organic foods?", a:"Organic foods CANNOT be grown using glyphosate as a pesticide"},
+  {q:"Examples of GMO / bio-engineered foods (select all):", a:"Apples with anti-frost gene; Golden Rice (beta carotene via transgenics); Salmon with gene from different fish species"},
+  {q:"Organic farmers can use natural pesticides but cannot use:", a:"Radiation"},
+  {q:"GLP-1 is a:", a:"Hormone"},
+  {q:"True or False: In genetic engineering, a large proportion of an organism's DNA is altered.", a:"False — only a very small, specific portion is altered"},
+  {q:"Which is true about pesticides used in the U.S.?", a:"Chemical pesticides are synthetic (lab-made); biopesticides include naturally occurring substances"},
+  {q:"Which diet has been shown to lower cancer risk and improve cardiovascular health?", a:"Mediterranean diet"},
+  {q:"True or False: Evidence shows GMOs are harmful to humans when consumed.", a:"False — current evidence shows GMOs are safe to consume"},
+  {q:"Which is NOT controlled for or prohibited in Organically labeled foods?", a:"Natural breeding"},
+  {q:"True or False: Beta-alanine is an essential supplement for infants.", a:"False"},
+  {q:"What is true about GMOs regarding genetic material altered?", a:"Very little genetic material is altered compared to the natural counterpart"},
+  {q:"True or False: The 'dirty dozen' are foods you should ideally buy organic.", a:"True — they have high pesticide residue"},
+  {q:"Which is true about dietary supplements?", a:"Regulated by FDA as food products — NOT required to be tested for efficacy"},
+  {q:"True or False: All bio-engineered foods are GMOs.", a:"True"},
+  {q:"Which is NOT allowed in Organic foods?", a:"Growth hormones for farm animals"},
+  {q:"Which are TRUE regarding GMOs (select all)?", a:"They need to be highly regulated; they have existed since the 1990s; they can have health benefits"},
+  {q:"Which is true about Glyphosate in the U.S.?", a:"Glyphosate is a synthetic pesticide widely used in the U.S."},
+  {q:"Which is NOT true about genetic engineering of foods?", a:"False claim: 'There are no nutritional benefits reported to any GMO' — Golden Rice provides Vitamin A"},
+  {q:"A GMO potato was produced to be resistant to:", a:"Insects"},
+  {q:"True or False: The 'dirty dozen' often has thin peels and are eaten whole (like strawberries and blueberries).", a:"True"},
+  {q:"True or False: It is essential for athletes to consume collagen supplements to maintain healthy joints.", a:"False — research does NOT show it is essential"},
+  {q:"Term for transferring a gene from one organism to another:", a:"Transgenics"},
+  {q:"True or False: Supplements may be harmful for individuals who observe a healthy, balanced diet.", a:"True — supplements are not needed and may even be harmful"}
+];
 
-let score=0
-let lives=3
-let donation=0
-let bucketX=150
-let gameLoop
+/* ══ STATE ══ */
+let deck = [...ALL];
+let hardSet  = new Set(JSON.parse(localStorage.getItem('sj_hard')||'[]'));
+let mastSet  = new Set(JSON.parse(localStorage.getItem('sj_mast')||'[]'));
+let xp       = parseInt(localStorage.getItem('sj_xp')||'0');
+let streak   = 0;
+let mode     = 'flash';
+let filter   = 'all';
+// flashcard
+let fcIdx=0, fcFlipped=false;
+// drill
+let drIdx=0, drRevealed=false;
+// focus
+let focIdx=0, focFlipped=false;
+// timer
+let timerMins=25, timerSecs=0, timerInterval=null, timerRunning=false;
 
-const scoreText=document.getElementById("score")
-const livesText=document.getElementById("lives")
-const donationText=document.getElementById("donation")
-const progress=document.getElementById("progress")
-const bucket=document.getElementById("bucket")
-const game=document.getElementById("game")
-const startBtn=document.getElementById("start")
-const gameOver=document.getElementById("gameOver")
-
-startBtn.onclick=startGame
-
-function startGame(){
-
-score=0
-lives=3
-donation=0
-
-scoreText.innerText=score
-livesText.innerText="❤️❤️❤️"
-donationText.innerText="Donation: $0"
-progress.style.width="0%"
-
-gameOver.style.display="none"
-startBtn.style.display="none"
-
-gameLoop=setInterval(createDrop,700)
-
+/* ══ INIT ══ */
+function init(){
+  updateStats();
+  buildDeck();
+  renderFC(); renderDrill(); renderFocus();
+  spawnSparkles();
 }
 
-/* Move bucket */
-
-document.addEventListener("keydown",function(e){
-
-if(e.key==="ArrowLeft") bucketX-=30
-if(e.key==="ArrowRight") bucketX+=30
-
-if(bucketX<0) bucketX=0
-if(bucketX>280) bucketX=280
-
-bucket.style.left=bucketX+"px"
-
-})
-
-/* Create drops */
-
-function createDrop(){
-
-let drop=document.createElement("div")
-
-if(Math.random()<0.2){
-drop.innerText="🟢"
-drop.classList.add("drop","bad")
-}else{
-drop.innerText="💧"
-drop.classList.add("drop")
+function buildDeck(){
+  if(filter==='hard'){
+    deck = ALL.filter((_,i)=>hardSet.has(i));
+    if(!deck.length){ deck=[...ALL]; }
+  } else {
+    deck = [];
+    ALL.forEach((c,i)=>{
+      deck.push({...c,oi:i});
+      if(hardSet.has(i)) deck.push({...c,oi:i}); // spaced rep: hard 2×
+    });
+  }
+  fcIdx=0; drIdx=0; focIdx=0;
+  document.getElementById('fc-tot').textContent  = deck.length;
+  document.getElementById('dr-tot').textContent  = deck.length;
+  document.getElementById('foc-tot').textContent = deck.length;
+  document.getElementById('all-count').textContent = ALL.length;
+  document.getElementById('total-val').textContent = ALL.length;
 }
 
-drop.style.left=Math.random()*320+"px"
-drop.style.top="-20px"
-
-game.appendChild(drop)
-
-let fall=setInterval(()=>{
-
-drop.style.top=drop.offsetTop+5+"px"
-
-let dropTop=drop.offsetTop
-let dropLeft=drop.offsetLeft
-let bucketLeft=bucket.offsetLeft
-
-/* Collision */
-
-if(dropTop>390 && dropLeft>bucketLeft-10 && dropLeft<bucketLeft+70){
-
-clearInterval(fall)
-
-/* Sink into bucket */
-
-let sink=setInterval(()=>{
-
-drop.style.top=drop.offsetTop+4+"px"
-
-if(drop.offsetTop>470){
-
-clearInterval(sink)
-
-if(drop.classList.contains("bad")){
-
-lives--
-updateLives()
-
-}else{
-
-score+=10
-donation+=1
-
-scoreText.innerText=score
-donationText.innerText="Donation: $"+donation
-progress.style.width=donation*10+"%"
-
-createSplash(bucketLeft+30,470)
-
+/* ══ STATS ══ */
+function updateStats(){
+  document.getElementById('xp-val').textContent       = xp;
+  document.getElementById('streak-val').textContent   = streak;
+  document.getElementById('mastered-val').textContent = mastSet.size;
+  document.getElementById('total-val').textContent    = ALL.length;
+  document.getElementById('hard-count').textContent   = hardSet.size;
+  const pct = Math.round(mastSet.size/ALL.length*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('pct-val').textContent = pct+'%';
+}
+function save(){
+  localStorage.setItem('sj_hard', JSON.stringify([...hardSet]));
+  localStorage.setItem('sj_mast', JSON.stringify([...mastSet]));
+  localStorage.setItem('sj_xp',   xp);
 }
 
-drop.remove()
-
+/* ══ MODE ══ */
+function setMode(m, btn){
+  mode = m;
+  ['flash','drill','focus'].forEach(id=>{
+    document.getElementById(id+'-mode').style.display='none';
+    document.getElementById('t-'+id).classList.remove('active');
+  });
+  document.getElementById(m+'-mode').style.display='block';
+  document.getElementById('t-'+m).classList.add('active');
+  buildDeck();
+  if(m==='flash')  renderFC();
+  if(m==='drill')  renderDrill();
+  if(m==='focus')  renderFocus();
 }
 
-},20)
-
+function setFilter(f, btn){
+  filter = f;
+  document.querySelectorAll('.chip-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildDeck();
+  renderFC(); renderDrill(); renderFocus();
 }
 
-if(dropTop>560){
-drop.remove()
-clearInterval(fall)
+function shuffle(){
+  for(let i=deck.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]]=[deck[j],deck[i]];
+  }
+  fcIdx=drIdx=focIdx=0;
+  renderFC(); renderDrill(); renderFocus();
+  showToast('✦ Shuffled!');
 }
 
-},30)
-
+/* ══ XP / STREAK ══ */
+function earnXP(n){
+  xp+=n; save(); updateStats();
+  showToast('✦ +'+n+' xp');
+}
+function incStreak(){
+  streak++;
+  document.getElementById('streak-val').textContent = streak;
+  if(streak>0 && streak%3===0) fireStreak();
+}
+function resetStreak(){ streak=0; document.getElementById('streak-val').textContent=0; }
+function fireStreak(){
+  const el = document.getElementById('streak-text');
+  el.textContent = '✿ '+streak+'× Streak!';
+  const ov = document.getElementById('streak-overlay');
+  ov.classList.add('show');
+  setTimeout(()=>ov.classList.remove('show'),1600);
 }
 
-/* Splash */
-
-function createSplash(x,y){
-
-let splash=document.createElement("div")
-splash.innerText="💦"
-splash.classList.add("splash")
-
-splash.style.left=x+"px"
-splash.style.top=y+"px"
-
-game.appendChild(splash)
-
-setTimeout(()=>splash.remove(),400)
-
+/* ══ TOAST ══ */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
 }
 
-/* Lives */
-
-function updateLives(){
-
-if(lives==3) livesText.innerText="❤️❤️❤️"
-if(lives==2) livesText.innerText="❤️❤️"
-if(lives==1) livesText.innerText="❤️"
-
-if(lives<=0) endGame()
-
+/* ══════════════════════════════════════
+   FLASHCARD MODE
+══════════════════════════════════════ */
+function renderFC(){
+  if(!deck.length) return;
+  const c = deck[fcIdx];
+  const oi = c.oi !== undefined ? c.oi : fcIdx;
+  document.getElementById('fc-q').textContent = c.q;
+  document.getElementById('fc-a').textContent = c.a;
+  document.getElementById('fc-num').textContent = '#'+(oi+1);
+  document.getElementById('fc-cur').textContent = fcIdx+1;
+  document.getElementById('fc-tot').textContent = deck.length;
+  const isH = hardSet.has(oi);
+  document.getElementById('fc-hard-dot').classList.toggle('show', isH);
+  const mb = document.getElementById('fc-mark-btn');
+  mb.classList.toggle('on', isH);
+  mb.textContent = isH ? '✓ Marked Hard' : '⚠ Mark Hard';
+  fcFlipped=false;
+  document.getElementById('card-inner').classList.remove('flipped');
+}
+function flip(){
+  fcFlipped=!fcFlipped;
+  document.getElementById('card-inner').classList.toggle('flipped',fcFlipped);
+  if(fcFlipped) earnXP(3);
+}
+function fcNext(){
+  if(fcIdx<deck.length-1){ fcIdx++; renderFC(); }
+  else { fcIdx=0; renderFC(); showToast('✿ Set complete! Looping...'); earnXP(20); }
+}
+function fcPrev(){
+  if(fcIdx>0){ fcIdx--; renderFC(); }
+}
+function toggleHard(){
+  const c = deck[fcIdx];
+  const oi = c.oi !== undefined ? c.oi : fcIdx;
+  if(hardSet.has(oi)) hardSet.delete(oi); else hardSet.add(oi);
+  save(); updateStats(); renderFC();
 }
 
-function endGame(){
-
-clearInterval(gameLoop)
-
-document.querySelectorAll(".drop").forEach(d=>d.remove())
-
-document.getElementById("final").innerText=
-"Final Score: "+score+" | Donation: $"+donation
-
-gameOver.style.display="block"
-startBtn.style.display="block"
-
+/* ══════════════════════════════════════
+   MEMORY DRILL MODE
+══════════════════════════════════════ */
+function renderDrill(){
+  if(!deck.length) return;
+  const c = deck[drIdx];
+  const oi = c.oi !== undefined ? c.oi : drIdx;
+  document.getElementById('drill-q').textContent = c.q;
+  document.getElementById('drill-a').textContent = c.a;
+  document.getElementById('dr-num').textContent = '#'+(oi+1);
+  document.getElementById('dr-cur').textContent = drIdx+1;
+  document.getElementById('dr-tot').textContent = deck.length;
+  document.getElementById('dr-hard-dot').classList.toggle('show', hardSet.has(oi));
+  document.getElementById('drill-answer').classList.remove('show');
+  document.getElementById('drill-reveal-btn').style.display='block';
+  drRevealed=false;
+}
+function drillReveal(){
+  document.getElementById('drill-answer').classList.add('show');
+  document.getElementById('drill-reveal-btn').style.display='none';
+  drRevealed=true;
+  earnXP(2);
+}
+function drillGrade(g){
+  if(!drRevealed) return;
+  const c = deck[drIdx];
+  const oi = c.oi !== undefined ? c.oi : drIdx;
+  if(g==='easy'){
+    hardSet.delete(oi); mastSet.add(oi);
+    incStreak(); earnXP(10);
+  } else if(g==='hard'){
+    hardSet.add(oi); resetStreak(); earnXP(1);
+  } else { // again
+    hardSet.add(oi); earnXP(3);
+  }
+  save(); updateStats();
+  if(drIdx<deck.length-1){ drIdx++; renderDrill(); }
+  else { drIdx=0; renderDrill(); showToast('✿ Set complete!'); earnXP(20); }
 }
 
+/* ══════════════════════════════════════
+   FOCUS MODE
+══════════════════════════════════════ */
+function renderFocus(){
+  if(!deck.length) return;
+  const c = deck[focIdx];
+  document.getElementById('foc-q').textContent = c.q;
+  document.getElementById('foc-a').textContent = c.a;
+  document.getElementById('foc-cur').textContent = focIdx+1;
+  document.getElementById('foc-tot').textContent = deck.length;
+  focFlipped=false;
+  document.getElementById('focus-inner').classList.remove('flipped');
+}
+function focusFlip(){
+  focFlipped=!focFlipped;
+  document.getElementById('focus-inner').classList.toggle('flipped',focFlipped);
+}
+function focusNext(){
+  if(focIdx<deck.length-1){ focIdx++; renderFocus(); }
+  else { focIdx=0; renderFocus(); showToast('✿ Set complete!'); }
+}
+function focusPrev(){
+  if(focIdx>0){ focIdx--; renderFocus(); }
+}
+
+/* ══ TIMER ══ */
+function setTimer(m){
+  clearInterval(timerInterval); timerRunning=false;
+  timerMins=m; timerSecs=0;
+  document.getElementById('focus-timer-disp').textContent = pad(m)+':00';
+  document.getElementById('focus-start-btn').textContent='▶ Start';
+}
+function toggleTimer(){
+  if(timerRunning){
+    clearInterval(timerInterval); timerRunning=false;
+    document.getElementById('focus-start-btn').textContent='▶ Start';
+  } else {
+    timerRunning=true;
+    document.getElementById('focus-start-btn').textContent='⏸ Pause';
+    timerInterval = setInterval(()=>{
+      if(timerSecs===0){
+        if(timerMins===0){ clearInterval(timerInterval); timerRunning=false; showToast('✿ Timer done!'); earnXP(30); document.getElementById('focus-start-btn').textContent='▶ Start'; return; }
+        timerMins--; timerSecs=59;
+      } else { timerSecs--; }
+      document.getElementById('focus-timer-disp').textContent=pad(timerMins)+':'+pad(timerSecs);
+    },1000);
+  }
+}
+function pad(n){ return n<10?'0'+n:n; }
+
+/* ══ KEYBOARD ══ */
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  if(mode==='flash'){
+    if(e.key===' '){ e.preventDefault(); flip(); }
+    if(e.key==='ArrowRight') fcNext();
+    if(e.key==='ArrowLeft')  fcPrev();
+    if(e.key.toLowerCase()==='h') toggleHard();
+    if(e.key.toLowerCase()==='s') shuffle();
+  }
+  if(mode==='drill'){
+    if(e.key===' '){ e.preventDefault(); if(!drRevealed) drillReveal(); }
+    if(e.key.toLowerCase()==='e' && drRevealed) drillGrade('easy');
+    if(e.key.toLowerCase()==='a' && drRevealed) drillGrade('again');
+    if(e.key.toLowerCase()==='x' && drRevealed) drillGrade('hard');
+  }
+  if(mode==='focus'){
+    if(e.key===' '){ e.preventDefault(); focusFlip(); }
+    if(e.key==='ArrowRight') focusNext();
+    if(e.key==='ArrowLeft')  focusPrev();
+  }
+});
+
+/* ══ SPARKLES ══ */
+function spawnSparkles(){
+  const symbols=['✿','✦','◌','·','˚','⁺'];
+  setInterval(()=>{
+    const s = document.createElement('div');
+    s.className='sparkle';
+    s.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    s.style.cssText=`left:${Math.random()*100}%;bottom:${Math.random()*30}%;font-size:${8+Math.random()*8}px;animation-duration:${4+Math.random()*6}s;animation-delay:${Math.random()*2}s;`;
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 10000);
+  }, 1200);
+}
+
+/* ══ START ══ */
+init();
 </script>
-
 </body>
 </html>
