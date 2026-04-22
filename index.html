@@ -1159,5 +1159,107 @@ function spawnSparkles(){
 /* ══ START ══ */
 init();
 </script>
+<!-- CAT CHEER CONTAINER -->
+<div id="cat-cheer-container"></div>
+
+<style>
+/* CAT CHEER SYSTEM (NO EMOJIS) */
+#cat-cheer-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.cat-cheer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  animation: catPop 0.4s ease, catFade 6s forwards;
+}
+
+.cat-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+}
+
+.cat-text {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(230,170,195,0.4);
+  backdrop-filter: blur(10px);
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  color: #c9516d;
+  box-shadow: 0 4px 12px rgba(200,100,140,0.15);
+}
+
+/* animations */
+@keyframes catPop {
+  from { transform: translateY(10px) scale(0.85); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes catFade {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+</style>
+
+<script>
+/* CAT CHEER LOGIC (IMAGE VERSION) */
+const catMessages = [
+  "good luck ✿",
+  "you got this",
+  "stay focused",
+  "you’re doing amazing",
+  "keep going",
+  "you will ace this",
+  "don’t give up",
+  "tiny steps = big wins"
+];
+
+/* soft aesthetic cat images */
+const catImages = [
+  "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+  "https://cdn-icons-png.flaticon.com/512/763/763704.png",
+  "https://cdn-icons-png.flaticon.com/512/2138/2138440.png",
+  "https://cdn-icons-png.flaticon.com/512/616/616430.png"
+];
+
+function spawnCatCheer() {
+  const container = document.getElementById("cat-cheer-container");
+
+  const el = document.createElement("div");
+  el.className = "cat-cheer";
+
+  const img = document.createElement("img");
+  img.className = "cat-img";
+  img.src = catImages[Math.floor(Math.random() * catImages.length)];
+
+  const text = document.createElement("div");
+  text.className = "cat-text";
+  text.textContent = catMessages[Math.floor(Math.random() * catMessages.length)];
+
+  el.appendChild(img);
+  el.appendChild(text);
+  container.appendChild(el);
+
+  setTimeout(() => {
+    el.remove();
+  }, 6000);
+}
+
+/* random spawn */
+setInterval(() => {
+  spawnCatCheer();
+}, 8000 + Math.random() * 6000);
+</script>
 </body>
 </html>
