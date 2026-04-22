@@ -6,9 +6,6 @@
 <title>Sejol George Studies ✿</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════
-   CUSTOM PROPERTIES
-══════════════════════════════════════════ */
 :root {
   --bg:         #fdf4f7;
   --bg2:        #f9edf2;
@@ -36,7 +33,6 @@
   --glow2:      0 0 48px rgba(232,131,158,0.18);
 }
 
-/* ══ RESET ══ */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body {
@@ -48,496 +44,333 @@ body {
   position: relative;
 }
 
-/* ══════════════════════════════════════════
-   ANIMATED BACKGROUND
-══════════════════════════════════════════ */
-.bg-layer {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  overflow: hidden;
-}
-.bg-blob {
-  position: absolute; border-radius: 50%;
-  filter: blur(70px); opacity: 0.45;
-  animation: blobFloat ease-in-out infinite alternate;
-}
+.bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bg-blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.45; animation: blobFloat ease-in-out infinite alternate; }
 .b1 { width:500px;height:500px; top:-100px;left:-100px; background:radial-gradient(circle,#f7c4d4,#f0a3b8); animation-duration:12s; }
 .b2 { width:400px;height:400px; top:30%;right:-120px; background:radial-gradient(circle,#fce8ef,#f5b8cb); animation-duration:16s;animation-delay:3s; }
 .b3 { width:350px;height:350px; bottom:-80px;left:20%; background:radial-gradient(circle,#f9edf2,#e8839e88); animation-duration:14s;animation-delay:6s; }
 .b4 { width:250px;height:250px; top:60%;left:5%; background:radial-gradient(circle,#fce8ef,#f7c4d4); animation-duration:18s;animation-delay:1s; }
+@keyframes blobFloat { from{transform:translateY(0) scale(1);} to{transform:translateY(30px) scale(1.06);} }
 
-@keyframes blobFloat {
-  from { transform: translateY(0) scale(1); }
-  to   { transform: translateY(30px) scale(1.06); }
-}
+.sparkle { position:fixed; pointer-events:none; z-index:0; animation:sparkleFade linear infinite; font-size:12px; color:var(--p2); opacity:0; }
+@keyframes sparkleFade { 0%{opacity:0;transform:translateY(0) scale(.5);} 20%{opacity:.8;} 80%{opacity:.4;} 100%{opacity:0;transform:translateY(-60px) scale(1.2) rotate(30deg);} }
 
-/* ══ PARTICLES ══ */
-.sparkle {
-  position: fixed; pointer-events: none; z-index: 0;
-  animation: sparkleFade linear infinite;
-  font-size: 12px; color: var(--p2);
-  opacity: 0;
-}
-@keyframes sparkleFade {
-  0%   { opacity:0; transform:translateY(0) scale(.5); }
-  20%  { opacity:.8; }
-  80%  { opacity:.4; }
-  100% { opacity:0; transform:translateY(-60px) scale(1.2) rotate(30deg); }
-}
+#app { position:relative; z-index:1; max-width:820px; margin:0 auto; padding:0 20px 80px; }
 
-/* ══════════════════════════════════════════
-   LAYOUT
-══════════════════════════════════════════ */
-#app {
-  position: relative; z-index: 1;
-  max-width: 820px; margin: 0 auto;
-  padding: 0 20px 80px;
-}
+/* HEADER */
+.header { padding:40px 0 28px; text-align:center; position:relative; }
+.logo { font-family:'Cormorant Garamond',serif; font-size:clamp(28px,5vw,44px); font-weight:300; font-style:italic; color:var(--text); letter-spacing:1px; line-height:1.1; margin-bottom:5px; }
+.logo span { background:linear-gradient(135deg,var(--p5),var(--p1),var(--p2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:500; }
+.logo-sub { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:24px; }
 
-/* ══════════════════════════════════════════
-   HEADER
-══════════════════════════════════════════ */
-.header {
-  padding: 40px 0 28px;
-  text-align: center;
-  position: relative;
-}
-.logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(28px, 5vw, 44px);
-  font-weight: 300;
-  font-style: italic;
-  color: var(--text);
-  letter-spacing: 1px;
-  line-height: 1.1;
-  margin-bottom: 5px;
-}
-.logo span {
-  background: linear-gradient(135deg, var(--p5), var(--p1), var(--p2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  font-weight: 500;
-}
-.logo-sub {
-  font-family: 'DM Mono', monospace; font-size: 11px;
-  letter-spacing: 3px; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 24px;
-}
+.stats-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:8px; }
+.stat-chip { background:var(--glass); backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:20px; padding:7px 16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); display:flex; align-items:center; gap:6px; box-shadow:var(--shadow2); transition:.2s; }
+.stat-chip .val { color:var(--p5); font-weight:500; }
+.stat-chip.streak .val { color:var(--rose); }
+.stat-chip.mastered .val { color:var(--green); }
 
-/* ══ STATS ROW ══ */
-.stats-row {
-  display: flex; gap: 12px; justify-content: center;
-  flex-wrap: wrap; margin-bottom: 8px;
-}
-.stat-chip {
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 7px 16px;
-  font-family: 'DM Mono', monospace; font-size: 11px;
-  color: var(--muted); display: flex; align-items: center; gap: 6px;
-  box-shadow: var(--shadow2);
-  transition: .2s;
-}
-.stat-chip .val { color: var(--p5); font-weight: 500; }
-.stat-chip.streak .val { color: var(--rose); }
-.stat-chip.mastered .val { color: var(--green); }
+.progress-wrap { margin:18px 0 0; }
+.progress-label { display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:6px; letter-spacing:1px; text-transform:uppercase; }
+.prog-track { height:5px; background:rgba(200,100,140,0.12); border-radius:3px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--p5),var(--p1),var(--p2)); transition:width .7s cubic-bezier(.4,0,.2,1); box-shadow:0 0 10px rgba(232,131,158,.5); }
 
-/* ══ PROGRESS BAR ══ */
-.progress-wrap { margin: 18px 0 0; }
-.progress-label {
-  display: flex; justify-content: space-between;
-  font-family: 'DM Mono', monospace; font-size: 10px;
-  color: var(--muted); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;
-}
-.prog-track {
-  height: 5px; background: rgba(200,100,140,0.12);
-  border-radius: 3px; overflow: hidden;
-}
-.prog-fill {
-  height: 100%; border-radius: 3px;
-  background: linear-gradient(90deg, var(--p5), var(--p1), var(--p2));
-  transition: width .7s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 0 10px rgba(232,131,158,.5);
-}
+/* TABS */
+.tabs-wrap { display:flex; gap:6px; justify-content:center; margin:28px 0 22px; flex-wrap:wrap; }
+.tab { background:var(--glass2); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:40px; padding:10px 22px; cursor:pointer; font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; color:var(--muted); transition:all .25s; display:flex; align-items:center; gap:7px; }
+.tab:hover { border-color:var(--p2); color:var(--p5); transform:translateY(-1px); }
+.tab.active { background:linear-gradient(135deg,rgba(232,131,158,.18),rgba(240,163,184,.1)); border-color:var(--p1); color:var(--p5); box-shadow:var(--glow); }
 
-/* ══════════════════════════════════════════
-   MODE TABS
-══════════════════════════════════════════ */
-.tabs-wrap {
-  display: flex; gap: 6px; justify-content: center;
-  margin: 28px 0 22px; flex-wrap: wrap;
-}
-.tab {
-  background: var(--glass2);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 40px;
-  padding: 10px 22px;
-  cursor: pointer;
-  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
-  color: var(--muted);
-  transition: all .25s;
-  display: flex; align-items: center; gap: 7px;
-}
-.tab:hover { border-color: var(--p2); color: var(--p5); transform: translateY(-1px); }
-.tab.active {
-  background: linear-gradient(135deg, rgba(232,131,158,.18), rgba(240,163,184,.1));
-  border-color: var(--p1); color: var(--p5);
-  box-shadow: var(--glow);
-}
+/* CTRL ROW */
+.ctrl-row { display:flex; gap:8px; align-items:center; margin-bottom:18px; flex-wrap:wrap; }
+.chip-btn { background:var(--glass); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:8px; padding:6px 14px; font-size:11.5px; cursor:pointer; color:var(--muted); transition:.2s; font-family:'DM Mono',monospace; }
+.chip-btn:hover { border-color:var(--p2); color:var(--p5); }
+.chip-btn.active { background:rgba(232,131,158,.12); border-color:var(--p1); color:var(--p5); }
+.chip-btn.danger.active { background:rgba(232,105,128,.1); border-color:var(--red); color:var(--red); }
+.ml-auto { margin-left:auto; }
+.card-count-label { text-align:center; margin-bottom:14px; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:1px; }
+.card-count-label span { color:var(--p5); }
 
-/* ══ FILTER / CONTROLS ROW ══ */
-.ctrl-row {
-  display: flex; gap: 8px; align-items: center; margin-bottom: 18px; flex-wrap: wrap;
-}
-.chip-btn {
-  background: var(--glass); backdrop-filter: blur(8px);
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 6px 14px; font-size: 11.5px; cursor: pointer;
-  color: var(--muted); transition: .2s;
-  font-family: 'DM Mono', monospace;
-}
-.chip-btn:hover { border-color: var(--p2); color: var(--p5); }
-.chip-btn.active { background: rgba(232,131,158,.12); border-color: var(--p1); color: var(--p5); }
-.chip-btn.danger.active { background: rgba(232,105,128,.1); border-color: var(--red); color: var(--red); }
-.ml-auto { margin-left: auto; }
-.card-count-label {
-  text-align: center; margin-bottom: 14px;
-  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
-  letter-spacing: 1px;
-}
-.card-count-label span { color: var(--p5); }
-
-/* ══════════════════════════════════════════
-   FLASHCARD
-══════════════════════════════════════════ */
-.card-scene {
-  perspective: 1400px;
-  height: 280px; cursor: pointer; margin-bottom: 18px;
-  user-select: none;
-}
-.card-inner {
-  width: 100%; height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform .6s cubic-bezier(.4,0,.2,1);
-}
-.card-inner.flipped { transform: rotateY(180deg); }
-
-.card-face {
-  position: absolute; inset: 0;
-  backface-visibility: hidden;
-  border-radius: 24px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 36px 40px; text-align: center;
-}
-
-/* FRONT */
-.card-front {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.7);
-}
-.card-front::before {
-  content: '';
-  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-  width: 60%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--p2), transparent);
-  border-radius: 1px;
-}
-/* BACK */
-.card-back {
-  background: linear-gradient(135deg, rgba(255,240,246,.92) 0%, rgba(253,230,240,.88) 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(220,140,170,.5);
-  box-shadow: var(--shadow), 0 0 40px rgba(232,131,158,.12), inset 0 1px 0 rgba(255,255,255,.8);
-  transform: rotateY(180deg);
-}
-.card-back::before {
-  content: '';
-  position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
-  width: 60%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--p1), transparent);
-  border-radius: 1px;
-}
-
-.card-eyebrow {
-  font-family: 'DM Mono', monospace; font-size: 9.5px;
-  letter-spacing: 2.5px; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
-}
-.card-eyebrow::before, .card-eyebrow::after {
-  content: ''; flex: 0 0 16px; height: 1px;
-  background: var(--border);
-}
-.card-question {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(15px,2.2vw,19px); font-weight: 500;
-  color: var(--text); line-height: 1.5;
-}
-.card-answer {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(17px,2.5vw,22px); font-weight: 500;
-  color: var(--p5); line-height: 1.5;
-  font-style: italic;
-}
-.card-num-badge {
-  position: absolute; top: 14px; right: 18px;
-  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--border);
-}
-.hard-dot {
-  position: absolute; top: 14px; left: 18px;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--red); display: none;
-  box-shadow: 0 0 6px rgba(232,105,128,.6);
-}
-.hard-dot.show { display: block; }
-.flip-whisper {
-  position: absolute; bottom: 14px;
-  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--border);
-  animation: breathe 3s ease-in-out infinite;
-}
+/* FLASHCARD */
+.card-scene { perspective:1400px; height:280px; cursor:pointer; margin-bottom:18px; user-select:none; }
+.card-inner { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .6s cubic-bezier(.4,0,.2,1); }
+.card-inner.flipped { transform:rotateY(180deg); }
+.card-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:36px 40px; text-align:center; }
+.card-front { background:var(--glass); backdrop-filter:blur(20px); border:1px solid var(--border); box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.7); }
+.card-front::before { content:''; position:absolute; top:-1px; left:50%; transform:translateX(-50%); width:60%; height:2px; background:linear-gradient(90deg,transparent,var(--p2),transparent); border-radius:1px; }
+.card-back { background:linear-gradient(135deg,rgba(255,240,246,.92) 0%,rgba(253,230,240,.88) 100%); backdrop-filter:blur(20px); border:1px solid rgba(220,140,170,.5); box-shadow:var(--shadow),0 0 40px rgba(232,131,158,.12),inset 0 1px 0 rgba(255,255,255,.8); transform:rotateY(180deg); }
+.card-back::before { content:''; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); width:60%; height:2px; background:linear-gradient(90deg,transparent,var(--p1),transparent); border-radius:1px; }
+.card-eyebrow { font-family:'DM Mono',monospace; font-size:9.5px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.card-eyebrow::before, .card-eyebrow::after { content:''; flex:0 0 16px; height:1px; background:var(--border); }
+.card-question { font-family:'Outfit',sans-serif; font-size:clamp(15px,2.2vw,19px); font-weight:500; color:var(--text); line-height:1.5; }
+.card-answer { font-family:'Cormorant Garamond',serif; font-size:clamp(17px,2.5vw,22px); font-weight:500; color:var(--p5); line-height:1.5; font-style:italic; }
+.card-num-badge { position:absolute; top:14px; right:18px; font-family:'DM Mono',monospace; font-size:10px; color:var(--border); }
+.hard-dot { position:absolute; top:14px; left:18px; width:8px; height:8px; border-radius:50%; background:var(--red); display:none; box-shadow:0 0 6px rgba(232,105,128,.6); }
+.hard-dot.show { display:block; }
+.flip-whisper { position:absolute; bottom:14px; font-family:'DM Mono',monospace; font-size:10px; color:var(--border); animation:breathe 3s ease-in-out infinite; }
 @keyframes breathe { 0%,100%{opacity:.4;} 50%{opacity:.9;} }
 
-/* ══ CARD BUTTONS ══ */
-.card-btns {
-  display: flex; gap: 10px; justify-content: center;
-  margin-bottom: 20px; flex-wrap: wrap;
-}
-.c-btn {
-  background: var(--glass); backdrop-filter: blur(8px);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 11px 20px; cursor: pointer;
-  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500;
-  color: var(--text2); transition: all .2s;
-  display: flex; align-items: center; gap: 6px;
-}
-.c-btn:hover { transform: translateY(-2px); }
-.c-btn.next {
-  background: linear-gradient(135deg, rgba(232,131,158,.18), rgba(240,163,184,.08));
-  border-color: var(--p1); color: var(--p5);
-}
-.c-btn.next:hover { box-shadow: var(--glow); }
-.c-btn.mark {
-  border-color: rgba(232,105,128,.35); color: var(--red);
-}
-.c-btn.mark:hover { background: rgba(232,105,128,.08); }
-.c-btn.mark.on { background: rgba(232,105,128,.1); border-color: var(--red); }
+.card-btns { display:flex; gap:10px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+.c-btn { background:var(--glass); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:12px; padding:11px 20px; cursor:pointer; font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; color:var(--text2); transition:all .2s; display:flex; align-items:center; gap:6px; }
+.c-btn:hover { transform:translateY(-2px); }
+.c-btn.next { background:linear-gradient(135deg,rgba(232,131,158,.18),rgba(240,163,184,.08)); border-color:var(--p1); color:var(--p5); }
+.c-btn.next:hover { box-shadow:var(--glow); }
+.c-btn.mark { border-color:rgba(232,105,128,.35); color:var(--red); }
+.c-btn.mark:hover { background:rgba(232,105,128,.08); }
+.c-btn.mark.on { background:rgba(232,105,128,.1); border-color:var(--red); }
 
-/* ══ KEYBOARD HINTS ══ */
-.kb-row {
-  display: flex; gap: 14px; justify-content: center;
-  flex-wrap: wrap; margin-bottom: 24px;
-}
-.kb-hint {
-  display: flex; align-items: center; gap: 5px;
-  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
-}
-.key {
-  background: var(--glass); backdrop-filter: blur(6px);
-  border: 1px solid var(--border); border-radius: 5px;
-  padding: 2px 7px; font-size: 10px; color: var(--muted);
-}
+.kb-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:24px; }
+.kb-hint { display:flex; align-items:center; gap:5px; font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); }
+.key { background:var(--glass); backdrop-filter:blur(6px); border:1px solid var(--border); border-radius:5px; padding:2px 7px; font-size:10px; color:var(--muted); }
 
-/* ══════════════════════════════════════════
-   MEMORY DRILL MODE
-══════════════════════════════════════════ */
-#drill-mode { display: none; }
-.drill-card {
+/* DRILL MODE */
+#drill-mode { display:none; }
+.drill-card { background:var(--glass); backdrop-filter:blur(20px); border:1px solid var(--border); border-radius:24px; padding:44px 40px; box-shadow:var(--shadow); text-align:center; margin-bottom:18px; position:relative; overflow:hidden; min-height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.drill-card::before { content:''; position:absolute; top:-1px; left:50%; transform:translateX(-50%); width:50%; height:2px; background:linear-gradient(90deg,transparent,var(--p1),transparent); }
+.drill-q { font-family:'Outfit',sans-serif; font-size:clamp(15px,2.2vw,20px); font-weight:500; color:var(--text); line-height:1.5; margin-bottom:24px; }
+.drill-reveal { background:linear-gradient(135deg,var(--p5),var(--p1)); border:none; border-radius:40px; padding:12px 32px; cursor:pointer; font-family:'Outfit',sans-serif; font-size:14px; font-weight:600; color:white; transition:all .2s; box-shadow:0 4px 18px rgba(197,81,109,.25); letter-spacing:.3px; }
+.drill-reveal:hover { transform:scale(1.04); box-shadow:0 6px 24px rgba(197,81,109,.35); }
+.drill-answer { margin-top:20px; padding:18px 24px; background:linear-gradient(135deg,rgba(247,196,212,.25),rgba(240,163,184,.15)); border:1px solid rgba(220,140,170,.35); border-radius:14px; display:none; animation:fadeUp .3s ease; }
+.drill-answer.show { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+.drill-answer-text { font-family:'Cormorant Garamond',serif; font-size:clamp(16px,2.5vw,21px); font-weight:500; color:var(--p5); line-height:1.5; font-style:italic; }
+.drill-grade-row { display:flex; gap:10px; justify-content:center; margin-top:16px; }
+.grade-btn { border-radius:10px; padding:10px 22px; cursor:pointer; font-family:'Outfit',sans-serif; font-size:13px; font-weight:600; transition:all .2s; border:1px solid transparent; }
+.gb-easy { background:rgba(94,196,138,.12); border-color:rgba(94,196,138,.4); color:var(--green); }
+.gb-easy:hover { background:rgba(94,196,138,.22); transform:translateY(-2px); }
+.gb-hard { background:rgba(232,105,128,.1); border-color:rgba(232,105,128,.35); color:var(--red); }
+.gb-hard:hover { background:rgba(232,105,128,.2); transform:translateY(-2px); }
+.gb-again { background:rgba(240,192,96,.1); border-color:rgba(240,192,96,.4); color:var(--yellow); }
+.gb-again:hover { background:rgba(240,192,96,.2); transform:translateY(-2px); }
+
+/* FOCUS MODE */
+#focus-mode { display:none; }
+.focus-outer { display:flex; flex-direction:column; align-items:center; gap:20px; }
+.focus-timer-wrap { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:20px; padding:20px 32px; text-align:center; box-shadow:var(--shadow2); width:100%; }
+.focus-timer { font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:300; color:var(--p5); line-height:1; margin-bottom:10px; }
+.focus-timer-btns { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.f-btn { background:var(--glass); backdrop-filter:blur(6px); border:1px solid var(--border); border-radius:8px; padding:7px 16px; cursor:pointer; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); transition:.2s; }
+.f-btn:hover { border-color:var(--p2); color:var(--p5); }
+.f-btn.active-timer { background:rgba(232,131,158,.1); border-color:var(--p1); color:var(--p5); }
+.focus-card-scene { perspective:1200px; width:100%; cursor:pointer; }
+.focus-card-inner { width:100%; height:260px; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,0,.2,1); position:relative; }
+.focus-card-inner.flipped { transform:rotateY(180deg); }
+.focus-face { position:absolute; inset:0; border-radius:20px; backface-visibility:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 36px; text-align:center; }
+.focus-front { background:var(--glass); backdrop-filter:blur(20px); border:1px solid var(--border); box-shadow:var(--shadow); }
+.focus-back { background:linear-gradient(135deg,rgba(255,240,246,.92),rgba(253,230,240,.88)); backdrop-filter:blur(20px); border:1px solid rgba(220,140,170,.5); box-shadow:var(--shadow); transform:rotateY(180deg); }
+.focus-nav { display:flex; gap:10px; justify-content:center; }
+
+/* ════════════════════
+   MCQ MODE
+════════════════════ */
+#mcq-mode { display:none; }
+.mcq-outer { display:flex; flex-direction:column; gap:16px; }
+.mcq-card {
   background: var(--glass);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: 44px 40px;
+  padding: 36px 36px 28px;
   box-shadow: var(--shadow);
-  text-align: center;
-  margin-bottom: 18px;
   position: relative;
   overflow: hidden;
-  min-height: 200px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: box-shadow .3s;
 }
-.drill-card::before {
-  content: '';
-  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-  width: 50%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--p1), transparent);
-}
-.drill-q {
+.mcq-card::before { content:''; position:absolute; top:-1px; left:50%; transform:translateX(-50%); width:55%; height:2px; background:linear-gradient(90deg,transparent,var(--p2),transparent); }
+.mcq-progress-text { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; margin-bottom:16px; }
+.mcq-q {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(15px,2.2vw,20px); font-weight: 500;
-  color: var(--text); line-height: 1.5; margin-bottom: 24px;
+  font-size: clamp(15px,2.2vw,18px);
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 24px;
 }
-.drill-reveal {
-  background: linear-gradient(135deg, var(--p5), var(--p1));
-  border: none; border-radius: 40px;
-  padding: 12px 32px; cursor: pointer;
-  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
-  color: white; transition: all .2s;
-  box-shadow: 0 4px 18px rgba(197,81,109,.25);
+.mcq-options { display:flex; flex-direction:column; gap:10px; }
+.mcq-opt {
+  background: rgba(255,255,255,0.45);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 18px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: var(--text2);
+  display: flex; align-items: flex-start; gap: 12px;
+  transition: all .2s;
+  text-align: left;
+  line-height: 1.4;
+}
+.mcq-opt:hover:not(.disabled) {
+  border-color: var(--p2);
+  background: rgba(240,163,184,.1);
+  transform: translateX(3px);
+}
+.mcq-opt.correct {
+  border-color: var(--green);
+  background: rgba(94,196,138,.1);
+  color: #2d7a50;
+}
+.mcq-opt.wrong {
+  border-color: var(--red);
+  background: rgba(232,105,128,.08);
+  color: var(--red);
+}
+.mcq-opt.disabled { cursor: default; }
+.mcq-opt-letter {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(200,100,140,.1);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  transition: all .2s;
+  margin-top: 1px;
+}
+.mcq-opt.correct .mcq-opt-letter { background: rgba(94,196,138,.2); border-color:var(--green); color:var(--green); }
+.mcq-opt.wrong   .mcq-opt-letter { background: rgba(232,105,128,.15); border-color:var(--red); color:var(--red); }
+.mcq-opt-text { flex:1; }
+
+.mcq-feedback {
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  display: none;
+  animation: fadeUp .3s ease;
+}
+.mcq-feedback.show { display: block; }
+.mcq-feedback.ok { background:rgba(94,196,138,.1); border:1px solid rgba(94,196,138,.3); color:#2d7a50; }
+.mcq-feedback.bad { background:rgba(232,105,128,.08); border:1px solid rgba(232,105,128,.25); color:var(--red); }
+.mcq-feedback strong { display:block; margin-bottom:4px; }
+.mcq-feedback .correct-ans { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:var(--p5); }
+
+.mcq-next-row { display:flex; justify-content:center; margin-top:18px; }
+
+/* ════════════════════
+   T/F MODE
+════════════════════ */
+#tf-mode { display:none; }
+.tf-outer { display:flex; flex-direction:column; gap:16px; }
+.tf-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 44px 36px 32px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.tf-card::before { content:''; position:absolute; top:-1px; left:50%; transform:translateX(-50%); width:55%; height:2px; background:linear-gradient(90deg,transparent,var(--p2),transparent); }
+.tf-progress-text { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; margin-bottom:20px; }
+.tf-q {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(15px,2.2vw,19px);
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 28px;
+  min-height: 70px;
+  display: flex; align-items: center; justify-content: center;
+}
+.tf-btn-row { display:flex; gap:14px; justify-content:center; margin-bottom:6px; }
+.tf-btn {
+  flex: 1; max-width: 160px;
+  border-radius: 16px;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all .22s;
+  border: 1.5px solid transparent;
   letter-spacing: .3px;
 }
-.drill-reveal:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(197,81,109,.35); }
-.drill-answer {
-  margin-top: 20px;
-  padding: 18px 24px;
-  background: linear-gradient(135deg, rgba(247,196,212,.25), rgba(240,163,184,.15));
-  border: 1px solid rgba(220,140,170,.35);
-  border-radius: 14px;
-  display: none; animation: fadeUp .3s ease;
+.tf-true {
+  background: rgba(94,196,138,.1);
+  border-color: rgba(94,196,138,.4);
+  color: #2d7a50;
 }
-.drill-answer.show { display: block; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
-.drill-answer-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(16px,2.5vw,21px); font-weight: 500;
-  color: var(--p5); line-height: 1.5; font-style: italic;
+.tf-true:hover:not(.disabled) { background:rgba(94,196,138,.22); transform:scale(1.04); box-shadow:0 4px 16px rgba(94,196,138,.2); }
+.tf-false {
+  background: rgba(232,105,128,.08);
+  border-color: rgba(232,105,128,.35);
+  color: var(--red);
 }
-.drill-grade-row {
-  display: flex; gap: 10px; justify-content: center; margin-top: 16px;
-}
-.grade-btn {
-  border-radius: 10px; padding: 10px 22px; cursor: pointer;
-  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600;
-  transition: all .2s; border: 1px solid transparent;
-}
-.gb-easy {
-  background: rgba(94,196,138,.12); border-color: rgba(94,196,138,.4); color: var(--green);
-}
-.gb-easy:hover { background: rgba(94,196,138,.22); transform: translateY(-2px); }
-.gb-hard {
-  background: rgba(232,105,128,.1); border-color: rgba(232,105,128,.35); color: var(--red);
-}
-.gb-hard:hover { background: rgba(232,105,128,.2); transform: translateY(-2px); }
-.gb-again {
-  background: rgba(240,192,96,.1); border-color: rgba(240,192,96,.4); color: var(--yellow);
-}
-.gb-again:hover { background: rgba(240,192,96,.2); transform: translateY(-2px); }
+.tf-false:hover:not(.disabled) { background:rgba(232,105,128,.18); transform:scale(1.04); box-shadow:0 4px 16px rgba(232,105,128,.2); }
+.tf-btn.selected-correct { background:rgba(94,196,138,.2); border-color:var(--green); color:#2d7a50; box-shadow:0 0 12px rgba(94,196,138,.3); }
+.tf-btn.selected-wrong { background:rgba(232,105,128,.18); border-color:var(--red); color:var(--red); box-shadow:0 0 12px rgba(232,105,128,.25); }
+.tf-btn.reveal-correct { background:rgba(94,196,138,.12); border-color:var(--green); color:#2d7a50; }
+.tf-btn.disabled { cursor:default; }
 
-/* ══════════════════════════════════════════
-   FOCUS MODE
-══════════════════════════════════════════ */
-#focus-mode { display: none; }
-.focus-outer {
-  display: flex; flex-direction: column; align-items: center; gap: 20px;
+.tf-feedback {
+  margin-top:18px;
+  padding:14px 20px;
+  border-radius:12px;
+  font-family:'Outfit',sans-serif;
+  font-size:13.5px;
+  line-height:1.5;
+  display:none;
+  animation: fadeUp .3s ease;
 }
-.focus-timer-wrap {
-  background: var(--glass); backdrop-filter: blur(16px);
-  border: 1px solid var(--border); border-radius: 20px;
-  padding: 20px 32px; text-align: center;
-  box-shadow: var(--shadow2); width: 100%;
-}
-.focus-timer {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 56px; font-weight: 300; color: var(--p5); line-height: 1;
-  margin-bottom: 10px;
-}
-.focus-timer-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-.f-btn {
-  background: var(--glass); backdrop-filter: blur(6px);
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 7px 16px; cursor: pointer;
-  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
-  transition: .2s;
-}
-.f-btn:hover { border-color: var(--p2); color: var(--p5); }
-.f-btn.active-timer { background: rgba(232,131,158,.1); border-color: var(--p1); color: var(--p5); }
-.focus-card-scene {
-  perspective: 1200px; width: 100%; cursor: pointer;
-}
-.focus-card-inner {
-  width: 100%; height: 260px;
-  transform-style: preserve-3d;
-  transition: transform .55s cubic-bezier(.4,0,.2,1);
-  position: relative;
-}
-.focus-card-inner.flipped { transform: rotateY(180deg); }
-.focus-face {
-  position: absolute; inset: 0; border-radius: 20px;
-  backface-visibility: hidden;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 32px 36px; text-align: center;
-}
-.focus-front {
-  background: var(--glass); backdrop-filter: blur(20px);
-  border: 1px solid var(--border); box-shadow: var(--shadow);
-}
-.focus-back {
-  background: linear-gradient(135deg, rgba(255,240,246,.92), rgba(253,230,240,.88));
+.tf-feedback.show { display:block; }
+.tf-feedback.ok { background:rgba(94,196,138,.1); border:1px solid rgba(94,196,138,.3); color:#2d7a50; }
+.tf-feedback.bad { background:rgba(232,105,128,.08); border:1px solid rgba(232,105,128,.25); color:var(--red); }
+.tf-feedback strong { display:block; margin-bottom:4px; font-size:15px; }
+.tf-feedback .tf-ans { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:var(--p5); }
+
+.tf-next-row { display:flex; justify-content:center; margin-top:18px; }
+
+/* SCORE SUMMARY */
+.score-summary {
+  background: var(--glass);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(220,140,170,.5); box-shadow: var(--shadow);
-  transform: rotateY(180deg);
-}
-.focus-nav { display: flex; gap: 10px; justify-content: center; }
-
-/* ══════════════════════════════════════════
-   STREAK / TOAST OVERLAYS
-══════════════════════════════════════════ */
-.streak-overlay {
-  position: fixed; inset: 0; z-index: 999; pointer-events: none;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity .3s;
-}
-.streak-overlay.show { opacity: 1; }
-.streak-badge {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(36px,7vw,64px); font-weight: 600; font-style: italic;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 44px 36px;
   text-align: center;
-  background: linear-gradient(135deg, var(--p5), var(--p1), var(--p3));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px rgba(232,131,158,.5));
-  animation: strPop .6s cubic-bezier(.175,.885,.32,1.275);
-}
-@keyframes strPop {
-  0%  { transform: scale(0) translateY(20px); opacity: 0; }
-  60% { transform: scale(1.15) translateY(-5px); }
-  100%{ transform: scale(1) translateY(0); opacity: 1; }
-}
-
-.toast {
-  position: fixed; bottom: 28px; right: 28px; z-index: 998;
-  background: var(--glass); backdrop-filter: blur(16px);
-  border: 1px solid var(--border); border-radius: 14px;
-  padding: 12px 20px;
-  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--p5);
   box-shadow: var(--shadow);
-  opacity: 0; transform: translateY(8px);
-  transition: all .3s; pointer-events: none;
+  display: none;
+  animation: fadeUp .4s ease;
 }
-.toast.show { opacity: 1; transform: translateY(0); }
+.score-summary.show { display: block; }
+.score-title { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:500; font-style:italic; color:var(--p5); margin-bottom:8px; }
+.score-sub { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:1px; margin-bottom:28px; }
+.score-big { font-family:'Cormorant Garamond',serif; font-size:clamp(56px,12vw,88px); font-weight:600; background:linear-gradient(135deg,var(--p5),var(--p1)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1; margin-bottom:8px; }
+.score-out { font-family:'DM Mono',monospace; font-size:13px; color:var(--muted); margin-bottom:28px; }
+.score-msg { font-family:'Outfit',sans-serif; font-size:15px; color:var(--text2); margin-bottom:28px; line-height:1.5; }
 
-/* ══════════════════════════════════════════
-   SECTION TITLE
-══════════════════════════════════════════ */
-.section-divider {
-  display: flex; align-items: center; gap: 12px;
-  margin: 0 0 16px;
-}
-.section-divider span {
-  font-family: 'DM Mono', monospace; font-size: 10px;
-  letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
-  white-space: nowrap;
-}
-.section-divider::before, .section-divider::after {
-  content: ''; flex: 1; height: 1px; background: var(--border);
-}
+/* OVERLAYS */
+.streak-overlay { position:fixed; inset:0; z-index:999; pointer-events:none; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .3s; }
+.streak-overlay.show { opacity:1; }
+.streak-badge { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,7vw,64px); font-weight:600; font-style:italic; text-align:center; background:linear-gradient(135deg,var(--p5),var(--p1),var(--p3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 16px rgba(232,131,158,.5)); animation:strPop .6s cubic-bezier(.175,.885,.32,1.275); }
+@keyframes strPop { 0%{transform:scale(0) translateY(20px);opacity:0;} 60%{transform:scale(1.15) translateY(-5px);} 100%{transform:scale(1) translateY(0);opacity:1;} }
 
-/* ══ RESPONSIVE ══ */
-@media (max-width: 560px) {
-  .header { padding: 28px 0 20px; }
-  #app { padding: 0 14px 60px; }
-  .card-face { padding: 26px 22px; }
-  .drill-card { padding: 30px 22px; }
+.toast { position:fixed; bottom:28px; right:28px; z-index:998; background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:14px; padding:12px 20px; font-family:'DM Mono',monospace; font-size:12px; color:var(--p5); box-shadow:var(--shadow); opacity:0; transform:translateY(8px); transition:all .3s; pointer-events:none; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+.section-divider { display:flex; align-items:center; gap:12px; margin:0 0 16px; }
+.section-divider span { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.section-divider::before, .section-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+@media(max-width:560px) {
+  .header { padding:28px 0 20px; }
+  #app { padding:0 14px 60px; }
+  .card-face { padding:26px 22px; }
+  .drill-card { padding:30px 22px; }
+  .mcq-card, .tf-card { padding:28px 20px 22px; }
+  .tf-btn { padding:12px 10px; font-size:14px; }
 }
 </style>
 </head>
 <body>
 
-<!-- BG -->
 <div class="bg-layer">
   <div class="bg-blob b1"></div>
   <div class="bg-blob b2"></div>
@@ -545,7 +378,6 @@ body {
   <div class="bg-blob b4"></div>
 </div>
 
-<!-- OVERLAYS -->
 <div class="streak-overlay" id="streak-overlay">
   <div class="streak-badge" id="streak-text">✿ 3× Streak!</div>
 </div>
@@ -553,45 +385,40 @@ body {
 
 <div id="app">
 
-  <!-- ══ HEADER ══ -->
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">Sejol <span>George</span> Studies</div>
     <div class="logo-sub">✿ memorize · repeat · master ✿</div>
-
     <div class="stats-row">
       <div class="stat-chip xp">✦ <span class="val" id="xp-val">0</span> xp</div>
       <div class="stat-chip streak">🌸 <span class="val" id="streak-val">0</span> streak</div>
       <div class="stat-chip mastered">✓ <span class="val" id="mastered-val">0</span>/<span id="total-val">56</span> mastered</div>
     </div>
-
     <div class="progress-wrap">
-      <div class="progress-label">
-        <span>mastery</span><span id="pct-val">0%</span>
-      </div>
+      <div class="progress-label"><span>mastery</span><span id="pct-val">0%</span></div>
       <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
   </div>
 
-  <!-- ══ TABS ══ -->
+  <!-- TABS -->
   <div class="tabs-wrap">
     <button class="tab active" onclick="setMode('flash',this)" id="t-flash">🃏 Flashcards</button>
     <button class="tab" onclick="setMode('drill',this)" id="t-drill">🧠 Memory Drill</button>
+    <button class="tab" onclick="setMode('mcq',this)" id="t-mcq">📝 MCQ Quiz</button>
+    <button class="tab" onclick="setMode('tf',this)" id="t-tf">☑ True / False</button>
     <button class="tab" onclick="setMode('focus',this)" id="t-focus">✦ Focus Mode</button>
   </div>
 
-  <!-- ══ FILTER / CTRL ROW ══ -->
-  <div class="ctrl-row">
+  <!-- CTRL ROW -->
+  <div class="ctrl-row" id="ctrl-row">
     <button class="chip-btn active" onclick="setFilter('all',this)">All (<span id="all-count">56</span>)</button>
     <button class="chip-btn danger" onclick="setFilter('hard',this)" id="hard-chip">⚠ Hard (<span id="hard-count">0</span>)</button>
     <button class="chip-btn ml-auto" onclick="shuffle()">↺ Shuffle</button>
   </div>
 
-  <!-- ════════════════════════════════════════
-       FLASHCARD MODE
-  ════════════════════════════════════════ -->
+  <!-- ═══════════════ FLASHCARD MODE ═══════════════ -->
   <div id="flash-mode">
     <div class="card-count-label">Card <span id="fc-cur">1</span> of <span id="fc-tot">56</span></div>
-
     <div class="card-scene" onclick="flip()">
       <div class="card-inner" id="card-inner">
         <div class="card-face card-front">
@@ -607,13 +434,11 @@ body {
         </div>
       </div>
     </div>
-
     <div class="card-btns">
       <button class="c-btn" onclick="fcPrev()">← Prev</button>
       <button class="c-btn mark" id="fc-mark-btn" onclick="toggleHard()">⚠ Mark Hard</button>
       <button class="c-btn next" onclick="fcNext()">Next →</button>
     </div>
-
     <div class="kb-row">
       <div class="kb-hint"><span class="key">Space</span>flip</div>
       <div class="kb-hint"><span class="key">←</span><span class="key">→</span>navigate</div>
@@ -622,12 +447,9 @@ body {
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════
-       MEMORY DRILL MODE
-  ════════════════════════════════════════ -->
+  <!-- ═══════════════ MEMORY DRILL MODE ═══════════════ -->
   <div id="drill-mode">
     <div class="card-count-label">Question <span id="dr-cur">1</span> of <span id="dr-tot">56</span></div>
-
     <div class="drill-card">
       <div class="hard-dot" id="dr-hard-dot"></div>
       <div class="card-num-badge" id="dr-num">#1</div>
@@ -642,7 +464,6 @@ body {
         </div>
       </div>
     </div>
-
     <div class="kb-row">
       <div class="kb-hint"><span class="key">Space</span>reveal</div>
       <div class="kb-hint"><span class="key">E</span>easy</div>
@@ -651,12 +472,58 @@ body {
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════
-       FOCUS MODE
-  ════════════════════════════════════════ -->
+  <!-- ═══════════════ MCQ MODE ═══════════════ -->
+  <div id="mcq-mode">
+    <div class="mcq-outer">
+      <div class="mcq-card" id="mcq-card">
+        <div class="mcq-progress-text">Question <span id="mcq-cur">1</span> of <span id="mcq-tot">0</span></div>
+        <div class="mcq-q" id="mcq-q">—</div>
+        <div class="mcq-options" id="mcq-options"></div>
+        <div class="mcq-feedback" id="mcq-feedback"></div>
+        <div class="mcq-next-row" id="mcq-next-row" style="display:none">
+          <button class="c-btn next" onclick="mcqNext()">Next →</button>
+        </div>
+      </div>
+      <div class="score-summary" id="mcq-summary">
+        <div class="score-title">Quiz Complete ✿</div>
+        <div class="score-sub">mcq · final results</div>
+        <div class="score-big" id="mcq-score-big">0</div>
+        <div class="score-out" id="mcq-score-out">out of 0</div>
+        <div class="score-msg" id="mcq-score-msg"></div>
+        <button class="c-btn next" onclick="mcqRestart()" style="margin:0 auto">↺ Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TRUE / FALSE MODE ═══════════════ -->
+  <div id="tf-mode">
+    <div class="tf-outer">
+      <div class="tf-card" id="tf-card">
+        <div class="tf-progress-text">Question <span id="tf-cur">1</span> of <span id="tf-tot">0</span></div>
+        <div class="tf-q" id="tf-q">—</div>
+        <div class="tf-btn-row">
+          <button class="tf-btn tf-true" id="tf-true-btn" onclick="tfAnswer(true)">✓ True</button>
+          <button class="tf-btn tf-false" id="tf-false-btn" onclick="tfAnswer(false)">✗ False</button>
+        </div>
+        <div class="tf-feedback" id="tf-feedback"></div>
+        <div class="tf-next-row" id="tf-next-row" style="display:none">
+          <button class="c-btn next" onclick="tfNext()">Next →</button>
+        </div>
+      </div>
+      <div class="score-summary" id="tf-summary">
+        <div class="score-title">Quiz Complete ✿</div>
+        <div class="score-sub">true / false · final results</div>
+        <div class="score-big" id="tf-score-big">0</div>
+        <div class="score-out" id="tf-score-out">out of 0</div>
+        <div class="score-msg" id="tf-score-msg"></div>
+        <button class="c-btn next" onclick="tfRestart()" style="margin:0 auto">↺ Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ FOCUS MODE ═══════════════ -->
   <div id="focus-mode">
     <div class="focus-outer">
-      <!-- Timer -->
       <div class="focus-timer-wrap">
         <div class="focus-timer" id="focus-timer-disp">25:00</div>
         <div class="focus-timer-btns">
@@ -666,8 +533,6 @@ body {
           <button class="f-btn active-timer" id="focus-start-btn" onclick="toggleTimer()">▶ Start</button>
         </div>
       </div>
-
-      <!-- Card -->
       <div class="section-divider"><span>focus card</span></div>
       <div class="card-count-label" style="width:100%;text-align:center">Card <span id="foc-cur">1</span> of <span id="foc-tot">56</span></div>
       <div class="focus-card-scene" onclick="focusFlip()">
@@ -694,10 +559,9 @@ body {
 
 <script>
 /* ══════════════════════════════════════
-   ALL Q&A — BOTH EXAM PDFS COMBINED
+   ALL Q&A
 ══════════════════════════════════════ */
 const ALL = [
-  // ── EXAM PDF 2 (Fluids, Electrolytes, GMOs) ──
   {q:"Which correctly describes the role of an electrolyte in circulatory fluid exchange?", a:"High Na⁺ concentration inside capillaries facilitates reabsorption of fluid at the venous end"},
   {q:"True or False: The SOLUTE is the substance dissolved in the SOLVENT.", a:"True"},
   {q:"Standard diet recommendation for patients with hypertension:", a:"A reduction of sodium in the diet"},
@@ -730,7 +594,6 @@ const ALL = [
   {q:"Electrolytes can aid in…", a:"Movement of molecules across the cell membrane and into the cell"},
   {q:"True or False: Sodium and potassium are transported in the same direction across the membrane.", a:"False — they move in opposite directions (Na⁺/K⁺ ATPase pump)"},
   {q:"Definition of electrolytes:", a:"Charged minerals dissolved in water which regulate fluid distribution"},
-  // ── GMO / ORGANIC / SUPPLEMENTS ──
   {q:"Which is NOT controlled for in Organically labeled produce?", a:"Naturally occurring mutations"},
   {q:"True or False: The 'clean 15' are foods that need to be bought organic.", a:"False — the clean 15 have low pesticide residue and do NOT need to be bought organic"},
   {q:"The first genetically modified food available to consumers in the US was:", a:"A Tomato"},
@@ -759,6 +622,28 @@ const ALL = [
   {q:"True or False: Supplements may be harmful for individuals who observe a healthy, balanced diet.", a:"True — supplements are not needed and may even be harmful"}
 ];
 
+/* ══ TRUE/FALSE ONLY QUESTIONS ══ */
+// Extract questions that are clearly True/False from the question stem
+const TF_QUESTIONS = ALL.filter(c => /^True or False:/i.test(c.q)).map(c => {
+  const isTrue = /^True\b/.test(c.a.trim());
+  return { q: c.q.replace(/^True or False:\s*/i, ''), a: c.a, correct: isTrue };
+});
+
+/* ══ MCQ DISTRACTOR POOL ══ */
+// Build a pool of unique short answers to use as distractors
+function buildDistractors(correctIdx, allItems) {
+  const pool = allItems
+    .map((c, i) => ({ a: c.a, i }))
+    .filter(x => x.i !== correctIdx)
+    .map(x => x.a);
+  // shuffle and pick 3
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, 3);
+}
+
 /* ══ STATE ══ */
 let deck = [...ALL];
 let hardSet  = new Set(JSON.parse(localStorage.getItem('sj_hard')||'[]'));
@@ -767,14 +652,15 @@ let xp       = parseInt(localStorage.getItem('sj_xp')||'0');
 let streak   = 0;
 let mode     = 'flash';
 let filter   = 'all';
-// flashcard
 let fcIdx=0, fcFlipped=false;
-// drill
 let drIdx=0, drRevealed=false;
-// focus
 let focIdx=0, focFlipped=false;
-// timer
 let timerMins=25, timerSecs=0, timerInterval=null, timerRunning=false;
+
+// MCQ state
+let mcqDeck=[], mcqIdx=0, mcqScore=0, mcqAnswered=false;
+// T/F state
+let tfDeck=[], tfIdx=0, tfScore=0, tfAnswered=false;
 
 /* ══ INIT ══ */
 function init(){
@@ -787,12 +673,12 @@ function init(){
 function buildDeck(){
   if(filter==='hard'){
     deck = ALL.filter((_,i)=>hardSet.has(i));
-    if(!deck.length){ deck=[...ALL]; }
+    if(!deck.length) deck=[...ALL];
   } else {
     deck = [];
     ALL.forEach((c,i)=>{
       deck.push({...c,oi:i});
-      if(hardSet.has(i)) deck.push({...c,oi:i}); // spaced rep: hard 2×
+      if(hardSet.has(i)) deck.push({...c,oi:i});
     });
   }
   fcIdx=0; drIdx=0; focIdx=0;
@@ -817,22 +703,28 @@ function updateStats(){
 function save(){
   localStorage.setItem('sj_hard', JSON.stringify([...hardSet]));
   localStorage.setItem('sj_mast', JSON.stringify([...mastSet]));
-  localStorage.setItem('sj_xp',   xp);
+  localStorage.setItem('sj_xp', xp);
 }
 
 /* ══ MODE ══ */
 function setMode(m, btn){
   mode = m;
-  ['flash','drill','focus'].forEach(id=>{
+  const allModes = ['flash','drill','mcq','tf','focus'];
+  allModes.forEach(id=>{
     document.getElementById(id+'-mode').style.display='none';
     document.getElementById('t-'+id).classList.remove('active');
   });
   document.getElementById(m+'-mode').style.display='block';
   document.getElementById('t-'+m).classList.add('active');
+  // Hide shuffle/filter for quiz modes
+  const ctrlRow = document.getElementById('ctrl-row');
+  ctrlRow.style.display = (m==='mcq'||m==='tf') ? 'none' : 'flex';
   buildDeck();
   if(m==='flash')  renderFC();
   if(m==='drill')  renderDrill();
   if(m==='focus')  renderFocus();
+  if(m==='mcq')    initMCQ();
+  if(m==='tf')     initTF();
 }
 
 function setFilter(f, btn){
@@ -879,9 +771,7 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),1800);
 }
 
-/* ══════════════════════════════════════
-   FLASHCARD MODE
-══════════════════════════════════════ */
+/* ══ FLASHCARD MODE ══ */
 function renderFC(){
   if(!deck.length) return;
   const c = deck[fcIdx];
@@ -918,9 +808,7 @@ function toggleHard(){
   save(); updateStats(); renderFC();
 }
 
-/* ══════════════════════════════════════
-   MEMORY DRILL MODE
-══════════════════════════════════════ */
+/* ══ MEMORY DRILL MODE ══ */
 function renderDrill(){
   if(!deck.length) return;
   const c = deck[drIdx];
@@ -950,7 +838,7 @@ function drillGrade(g){
     incStreak(); earnXP(10);
   } else if(g==='hard'){
     hardSet.add(oi); resetStreak(); earnXP(1);
-  } else { // again
+  } else {
     hardSet.add(oi); earnXP(3);
   }
   save(); updateStats();
@@ -959,8 +847,224 @@ function drillGrade(g){
 }
 
 /* ══════════════════════════════════════
-   FOCUS MODE
+   MCQ MODE
 ══════════════════════════════════════ */
+function initMCQ(){
+  // Build shuffled MCQ deck from ALL
+  mcqDeck = ALL.map((c,i)=>({...c,oi:i}));
+  for(let i=mcqDeck.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [mcqDeck[i],mcqDeck[j]]=[mcqDeck[j],mcqDeck[i]];
+  }
+  mcqIdx=0; mcqScore=0;
+  document.getElementById('mcq-summary').classList.remove('show');
+  document.getElementById('mcq-card').style.display='block';
+  document.getElementById('mcq-tot').textContent = mcqDeck.length;
+  renderMCQ();
+}
+
+function renderMCQ(){
+  mcqAnswered = false;
+  const c = mcqDeck[mcqIdx];
+  document.getElementById('mcq-cur').textContent = mcqIdx+1;
+  document.getElementById('mcq-q').textContent = c.q;
+
+  // Build choices: 1 correct + 3 distractors, shuffled
+  const distractors = buildDistractors(c.oi, ALL);
+  let choices = [
+    { text: c.a, correct: true },
+    ...distractors.map(d => ({ text: d, correct: false }))
+  ];
+  // Shuffle choices
+  for(let i=choices.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [choices[i],choices[j]]=[choices[j],choices[i]];
+  }
+
+  const letters = ['A','B','C','D'];
+  const optWrap = document.getElementById('mcq-options');
+  optWrap.innerHTML = '';
+  choices.forEach((ch, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'mcq-opt';
+    btn.innerHTML = `<span class="mcq-opt-letter">${letters[idx]}</span><span class="mcq-opt-text">${ch.text}</span>`;
+    btn.onclick = () => mcqChoose(ch, choices, btn);
+    optWrap.appendChild(btn);
+  });
+
+  const fb = document.getElementById('mcq-feedback');
+  fb.className = 'mcq-feedback';
+  fb.innerHTML = '';
+  document.getElementById('mcq-next-row').style.display='none';
+}
+
+function mcqChoose(ch, choices, clickedBtn){
+  if(mcqAnswered) return;
+  mcqAnswered = true;
+
+  const opts = document.querySelectorAll('.mcq-opt');
+  opts.forEach(o => {
+    o.classList.add('disabled');
+    const txt = o.querySelector('.mcq-opt-text').textContent;
+    const isCorrect = choices.find(c=>c.text===txt)?.correct;
+    if(isCorrect) o.classList.add('correct');
+  });
+
+  const wasCorrect = ch.correct;
+  if(!wasCorrect) clickedBtn.classList.add('wrong');
+
+  const fb = document.getElementById('mcq-feedback');
+  const correctAns = choices.find(c=>c.correct).text;
+  if(wasCorrect){
+    mcqScore++;
+    incStreak();
+    earnXP(10);
+    fb.className = 'mcq-feedback ok show';
+    fb.innerHTML = `<strong>✓ Correct!</strong>`;
+  } else {
+    resetStreak();
+    fb.className = 'mcq-feedback bad show';
+    fb.innerHTML = `<strong>✗ Not quite.</strong><div class="correct-ans">Correct answer: ${correctAns}</div>`;
+  }
+  document.getElementById('mcq-next-row').style.display='flex';
+}
+
+function mcqNext(){
+  mcqIdx++;
+  if(mcqIdx >= mcqDeck.length){
+    showMCQSummary();
+  } else {
+    renderMCQ();
+  }
+}
+
+function showMCQSummary(){
+  document.getElementById('mcq-card').style.display='none';
+  const summary = document.getElementById('mcq-summary');
+  summary.classList.add('show');
+  const total = mcqDeck.length;
+  const pct = Math.round(mcqScore/total*100);
+  document.getElementById('mcq-score-big').textContent = mcqScore;
+  document.getElementById('mcq-score-out').textContent = `out of ${total}`;
+  let msg = '';
+  if(pct===100) msg = '✿ Perfect score! You are absolutely unstoppable.';
+  else if(pct>=80) msg = '🌸 Great work! You clearly know your material.';
+  else if(pct>=60) msg = '✦ Solid effort — review the ones you missed and try again!';
+  else msg = '💪 Keep studying! Each attempt makes you stronger.';
+  document.getElementById('mcq-score-msg').textContent = msg;
+  earnXP(mcqScore * 5);
+}
+
+function mcqRestart(){
+  document.getElementById('mcq-summary').classList.remove('show');
+  document.getElementById('mcq-card').style.display='block';
+  initMCQ();
+}
+
+/* ══════════════════════════════════════
+   TRUE / FALSE MODE
+══════════════════════════════════════ */
+function initTF(){
+  // Build shuffled T/F deck
+  tfDeck = [...TF_QUESTIONS];
+  for(let i=tfDeck.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [tfDeck[i],tfDeck[j]]=[tfDeck[j],tfDeck[i]];
+  }
+  tfIdx=0; tfScore=0;
+  document.getElementById('tf-summary').classList.remove('show');
+  document.getElementById('tf-card').style.display='block';
+  document.getElementById('tf-tot').textContent = tfDeck.length;
+  renderTF();
+}
+
+function renderTF(){
+  tfAnswered = false;
+  const c = tfDeck[tfIdx];
+  document.getElementById('tf-cur').textContent = tfIdx+1;
+  document.getElementById('tf-q').textContent = c.q;
+
+  const tb = document.getElementById('tf-true-btn');
+  const fb2 = document.getElementById('tf-false-btn');
+  tb.className = 'tf-btn tf-true';
+  fb2.className = 'tf-btn tf-false';
+
+  const fb = document.getElementById('tf-feedback');
+  fb.className = 'tf-feedback';
+  fb.innerHTML = '';
+  document.getElementById('tf-next-row').style.display = 'none';
+}
+
+function tfAnswer(userSaidTrue){
+  if(tfAnswered) return;
+  tfAnswered = true;
+
+  const c = tfDeck[tfIdx];
+  const wasCorrect = (userSaidTrue === c.correct);
+
+  const tb = document.getElementById('tf-true-btn');
+  const fb2 = document.getElementById('tf-false-btn');
+  tb.classList.add('disabled');
+  fb2.classList.add('disabled');
+
+  // Highlight correct answer always
+  if(c.correct) tb.classList.add('reveal-correct');
+  else          fb2.classList.add('reveal-correct');
+
+  // Highlight user's pick
+  const pickedBtn = userSaidTrue ? tb : fb2;
+  if(wasCorrect) pickedBtn.classList.add('selected-correct');
+  else           pickedBtn.classList.add('selected-wrong');
+
+  const fb = document.getElementById('tf-feedback');
+  const correctLabel = c.correct ? 'True ✓' : 'False ✗';
+  if(wasCorrect){
+    tfScore++;
+    incStreak();
+    earnXP(8);
+    fb.className = 'tf-feedback ok show';
+    fb.innerHTML = `<strong>✓ Correct!</strong><div class="tf-ans">${c.a}</div>`;
+  } else {
+    resetStreak();
+    fb.className = 'tf-feedback bad show';
+    fb.innerHTML = `<strong>✗ The answer is: ${correctLabel}</strong><div class="tf-ans">${c.a}</div>`;
+  }
+  document.getElementById('tf-next-row').style.display='flex';
+}
+
+function tfNext(){
+  tfIdx++;
+  if(tfIdx >= tfDeck.length){
+    showTFSummary();
+  } else {
+    renderTF();
+  }
+}
+
+function showTFSummary(){
+  document.getElementById('tf-card').style.display='none';
+  const summary = document.getElementById('tf-summary');
+  summary.classList.add('show');
+  const total = tfDeck.length;
+  const pct = Math.round(tfScore/total*100);
+  document.getElementById('tf-score-big').textContent = tfScore;
+  document.getElementById('tf-score-out').textContent = `out of ${total}`;
+  let msg = '';
+  if(pct===100) msg = '✿ Flawless! You know your True/False inside out.';
+  else if(pct>=80) msg = '🌸 Really impressive — just a few to review!';
+  else if(pct>=60) msg = '✦ Good effort! Go back over the tricky ones.';
+  else msg = '💪 Keep going — you\'ve got this with more practice!';
+  document.getElementById('tf-score-msg').textContent = msg;
+  earnXP(tfScore * 5);
+}
+
+function tfRestart(){
+  document.getElementById('tf-summary').classList.remove('show');
+  document.getElementById('tf-card').style.display='block';
+  initTF();
+}
+
+/* ══ FOCUS MODE ══ */
 function renderFocus(){
   if(!deck.length) return;
   const c = deck[focIdx];
@@ -1028,6 +1132,14 @@ document.addEventListener('keydown', e=>{
     if(e.key===' '){ e.preventDefault(); focusFlip(); }
     if(e.key==='ArrowRight') focusNext();
     if(e.key==='ArrowLeft')  focusPrev();
+  }
+  if(mode==='mcq'){
+    if(e.key==='ArrowRight' && mcqAnswered) mcqNext();
+  }
+  if(mode==='tf'){
+    if(e.key.toLowerCase()==='t' && !tfAnswered) tfAnswer(true);
+    if(e.key.toLowerCase()==='f' && !tfAnswered) tfAnswer(false);
+    if(e.key==='ArrowRight' && tfAnswered) tfNext();
   }
 });
 
